@@ -1,0 +1,18 @@
+{{ if .Values.route.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "generic-chart.fullname" . }}
+  labels:
+{{ include "generic-chart.labels" . | indent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.route.host }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: {{ include "generic-chart.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}

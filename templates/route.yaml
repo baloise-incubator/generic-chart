@@ -1,0 +1,21 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-options: Validate=false
+  labels:
+{{ include "generic-chart.labels" . | indent 4 }}
+  name: {{ include "generic-chart.fullname" . }}
+spec:
+  host: {{ }}
+  path: /
+  port:
+    targetPort: http
+  tls:
+    insecureEdgeTerminationPolicy: Redirect
+    termination: edge
+  to:
+    kind: Service
+    name: {{ include "generic-chart.fullname" . }}
+    weight: 100
+  wildcardPolicy: None
