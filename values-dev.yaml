@@ -1,8 +1,8 @@
 replicaCount: 1
 
 image:
-#  repository: quay.balgroupit.com/example/nginx-sample
-#  tag: latest
+  repository: quay.balgroupit.com/example/nginx-sample
+  tag: latest
   pullPolicy: IfNotPresent
 
 imagePullSecrets: []
@@ -20,18 +20,15 @@ service:
 
 route:
   enabled: false
-#  host: demo-app.chapp-test.os1.balgroupit.com
+  host: demo-app.chapp-test.os1.balgroupit.com
   path: /
 
-livenessProbe: {}
-#  httpGet:
-#    path: /
-#    port: http
+livenessProbe:
+  httpGet:
+    path: /
+    port: http
 
-readinessProbe: {}
-#  httpGet:
-#    path: /
-#    port: http
+readinessProbe:
 
 resources: {}
 
