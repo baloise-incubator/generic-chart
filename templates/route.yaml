@@ -1,3 +1,4 @@
+{{ if .Values.route.enabled }}
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
@@ -7,7 +8,7 @@ metadata:
 {{ include "generic-chart.labels" . | indent 4 }}
   name: {{ include "generic-chart.fullname" . }}
 spec:
-  host: {{ }}
+  host: {{ .Values.route.host }}
   path: /
   port:
     targetPort: http
@@ -19,3 +20,4 @@ spec:
     name: {{ include "generic-chart.fullname" . }}
     weight: 100
   wildcardPolicy: None
+{{- end }}
