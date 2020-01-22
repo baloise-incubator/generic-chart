@@ -21,6 +21,7 @@ service:
 route:
   enabled: false
 #  host: demo-app.chapp-test.os1.balgroupit.com
+  path: /
 
 resources: {}
 
