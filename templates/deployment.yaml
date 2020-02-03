@@ -40,6 +40,10 @@ spec:
           readinessProbe:
             {{- toYaml .Values.readinessProbe | nindent 12 }}
 {{- end }}
+{{- if gt (len .Values.env) 0 }}
+          env:
+            {{- toYaml .Values.env | nindent 12 }}
+{{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
