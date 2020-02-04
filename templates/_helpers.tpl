@@ -43,3 +43,13 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end -}}
+
+{{/*
+Create default route host depending on release name and `.Values.route.zone` ("ch" or "shared")
+*/}}
+{{- define "generic-chart.host.default" -}}
+{{- $isProd := ne (regexFind "-prod$" .Release.Name) "" -}}
+{{- $prefix := regexFind "^(ch)|(sh)" .Values.route.zone -}}
+{{- $suffix := $isProd | ternary "" "-test" -}}
+{{- printf "%s.%sapp%s.os1.balgroupit.com" .Release.Name (required "A valid .Values.route.zone is required when using default host!" $prefix) $suffix -}}
+{{- end -}}
