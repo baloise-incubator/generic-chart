@@ -48,9 +48,8 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 Create default route host depending on release name.
 */}}
 {{- define "generic-chart.host.default" -}}
-{{- if regexFind "-prod$" .Release.Name -}}
-{{- printf "%s.chapp.os1.balgroupit.com" .Release.Name -}}
-{{- else -}}
-{{- printf "%s.chapp-test.os1.balgroupit.com" .Release.Name -}}
-{{- end -}}
+{{- $isProd := ne (regexFind "-prod$" .Release.Name) "" -}}
+{{- $prefix := regexFind "^(ch)|(sh)" .Values.route.zone -}}
+{{- $suffix := $isProd | ternary "" "-test" -}}
+{{- printf "%s.%sapp%s.os1.balgroupit.com" .Release.Name (required "A valid .Values.route.zone is required when using default host!" $prefix) $suffix -}}
 {{- end -}}

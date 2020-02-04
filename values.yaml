@@ -20,6 +20,7 @@ service:
 
 route:
   enabled: false
+#  zone: ch
 #  host: demo-app.chapp-test.os1.balgroupit.com
   path: /
 
