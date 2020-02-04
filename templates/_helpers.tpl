@@ -45,7 +45,7 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end -}}
 
 {{/*
-Create default route host depending on release name.
+Create default route host depending on release name and `.Values.route.zone` ("ch" or "shared")
 */}}
 {{- define "generic-chart.host.default" -}}
 {{- $isProd := ne (regexFind "-prod$" .Release.Name) "" -}}
