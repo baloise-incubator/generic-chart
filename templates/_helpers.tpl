@@ -43,3 +43,14 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end -}}
+
+{{/*
+Create default route host depending on release name.
+*/}}
+{{- define "generic-chart.host.default" -}}
+{{- if regexFind "-prod$" .Release.Name -}}
+{{- printf "%s.chapp.os1.balgroupit.com" .Release.Name -}}
+{{- else -}}
+{{- printf "%s.chapp-test.os1.balgroupit.com" .Release.Name -}}
+{{- end -}}
+{{- end -}}

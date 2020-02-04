@@ -8,7 +8,7 @@ metadata:
 {{ include "generic-chart.labels" . | indent 4 }}
   name: {{ include "generic-chart.fullname" . }}
 spec:
-  host: {{ .Values.route.host }}
+  host: {{ .Values.route.host | default ( include "generic-chart.host.default" . )}}
   path: {{ .Values.route.path }}
   port:
     targetPort: http
