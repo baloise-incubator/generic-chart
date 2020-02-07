@@ -6,7 +6,7 @@ metadata:
     argocd.argoproj.io/sync-options: Validate=false
   labels:
 {{ include "generic-chart.labels" . | indent 4 }}
-  name: {{ include "generic-chart.fullname" . }}
+  name: {{ include "generic-chart.name" . }}
 spec:
   host: {{ .Values.route.host | default ( include "generic-chart.host.default" . )}}
   path: {{ .Values.route.path }}
@@ -17,7 +17,7 @@ spec:
     termination: edge
   to:
     kind: Service
-    name: {{ include "generic-chart.fullname" . }}
+    name: {{ include "generic-chart.name" . }}
     weight: 100
   wildcardPolicy: None
 {{- end }}

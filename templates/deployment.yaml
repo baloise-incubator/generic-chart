@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "generic-chart.fullname" . }}
+  name: {{ include "generic-chart.name" . }}
   labels:
 {{ include "generic-chart.labels" . | indent 4 }}
 spec:
