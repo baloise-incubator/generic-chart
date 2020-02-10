@@ -42,5 +42,4 @@ env: []
 
 envFrom: []
 
-annotations:
-  my-annotation: foo
+annotations: {}
