@@ -41,3 +41,6 @@ affinity: {}
 env: []
 
 envFrom: []
+
+annotations:
+  my-annotation: foo
