@@ -1,45 +1,29 @@
 replicaCount: 1
 revisionHistoryLimit: 1
-
 image:
   repository: quay.balgroupit.com/example/nginx-sample
   tag: latest
   pullPolicy: IfNotPresent
-
 imagePullSecrets: []
 nameOverride: ""
-
-
 podSecurityContext: {}
-
 securityContext: {}
-
 service:
   type: ClusterIP
   port: 8080
-
 route:
   enabled: false
   host: demo-app.chapp-test.os1.balgroupit.com
   path: /
-
 livenessProbe:
   httpGet:
     path: /
     port: http
-
 readinessProbe:
-
 resources: {}
-
 nodeSelector: {}
-
 tolerations: []
-
 affinity: {}
-
 env: []
-
 envFrom: []
-
 annotations: {}
