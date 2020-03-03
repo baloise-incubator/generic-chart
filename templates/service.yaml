@@ -12,5 +12,5 @@ spec:
       protocol: TCP
       name: http
   selector:
-    app.kubernetes.io/name: {{ include "generic-chart.name" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
+    app: {{ include "generic-chart.name" . }}
+    release: {{ .Release.Name }}

@@ -17,26 +17,25 @@ Create chart name and version as used by the chart label.
 Common labels
 */}}
 {{- define "generic-chart.labels" -}}
-app.kubernetes.io/name: {{ include "generic-chart.name" . }}
+app: {{ include "generic-chart.name" . }}
 helm.sh/chart: {{ include "generic-chart.chart" . }}
-app.kubernetes.io/instance: {{ .Release.Name }}
+release: {{ .Release.Name }}
 {{- if .Chart.AppVersion }}
-app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+version: {{ .Chart.AppVersion | quote }}
 {{- end }}
-app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end -}}
 
 {{/*
 Create default route host depending on `.Chart.Name`, `.Release.Name`
-and `.Values.route.zone` ("ch" or "shared")
+and `.Values.ingress.zone` ("ch" or "shared")
 */}}
 {{- define "generic-chart.host" -}}
-{{- if .Values.route.host -}}
-{{- .Values.route.host -}}
+{{- if .Values.ingress.host -}}
+{{- .Values.ingress.host -}}
 {{- else -}}
 {{- $base := printf "%s-%s" .Chart.Name .Release.Name | trunc 63 | trimSuffix "-" -}}
-{{- $isProd := ne (regexFind "-prod$" .Release.Name) "" -}}
-{{- $prefix := .Values.route.zone | default "" | regexFind "^(ch)|(sh)" | required "A valid .Values.route.zone is required when using default host!" -}}
+{{- $isProd := hasSuffix "-prod" .Release.Name -}}
+{{- $prefix := .Values.ingress.zone | default "" | regexFind "^(ch)|(sh)" | required "A valid .Values.ingress.zone is required when using default host!" -}}
 {{- $suffix := $isProd | ternary "" "-test" -}}
 {{- printf "%s.%sapp%s.os1.balgroupit.com" $base $prefix $suffix -}}
 {{- end -}}
