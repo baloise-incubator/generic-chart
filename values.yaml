@@ -39,4 +39,6 @@ securityContext: {}
 nodeSelector: {}
 tolerations: []
 affinity: {}
+defaultAffinityRules:
+  enabled: true
 annotations: {}
