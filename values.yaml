@@ -9,13 +9,22 @@ nameOverride: ""
 service:
   type: ClusterIP
   port: 8080
-route:
+ingress:
+  controller: Route
   enabled: false
 #  host: demo-app.chapp-test.os1.balgroupit.com
 #  zone: ch
   path: /
 env: []
 envFrom: []
+persistence:
+  enabled: false
+  accessModes: ReadWriteOnce
+  storageClass: trident-nfs-snapshot
+#  size: 1Gi
+#  volumeMount: /var/app/data/
+volumes: []
+volumeMounts: []
 readinessProbe: {}
 #  httpGet:
 #    path: /
@@ -30,4 +39,6 @@ securityContext: {}
 nodeSelector: {}
 tolerations: []
 affinity: {}
+defaultAffinityRules:
+  enabled: true
 annotations: {}

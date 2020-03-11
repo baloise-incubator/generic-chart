@@ -9,8 +9,8 @@ spec:
   revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
   selector:
     matchLabels:
-      app.kubernetes.io/name: {{ include "generic-chart.name" . }}
-      app.kubernetes.io/instance: {{ .Release.Name }}
+      app: {{ include "generic-chart.name" . }}
+      release: {{ .Release.Name }}
   template:
     metadata:
 {{- if gt (len .Values.annotations ) 0 }}
@@ -18,8 +18,8 @@ spec:
         {{- toYaml .Values.annotations | nindent 8 }}
 {{- end }}
       labels:
-        app.kubernetes.io/name: {{ include "generic-chart.name" . }}
-        app.kubernetes.io/instance: {{ .Release.Name }}
+        app: {{ include "generic-chart.name" . }}
+        release: {{ .Release.Name }}
     spec:
     {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -53,9 +53,15 @@ spec:
           envFrom:
             {{- toYaml .Values.envFrom | nindent 12 }}
 {{- end }}
-{{- with .Values.volumeMounts }}
+{{- if or .Values.volumeMounts .Values.persistence.volumeMountPath }}
           volumeMounts:
-            {{- toYaml . | nindent 12 }}
+{{- if .Values.persistence.volumeMountPath }}
+            - mountPath: {{ .Values.persistence.volumeMountPath }}
+              name: {{ include "generic-chart.name" . }}
+{{- end }}
+{{- if .Values.volumeMounts -}}
+            {{- toYaml .Values.volumeMounts | nindent 12 }}
+{{- end }}
 {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
@@ -63,15 +69,39 @@ spec:
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.volumes }}
+{{- if or .Values.volumes .Values.persistence.volumeMountPath }}
       volumes:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-    {{- with .Values.affinity }}
+  {{- if .Values.persistence.volumeMountPath }}
+        - name: {{ include "generic-chart.name" . }}
+          persistentVolumeClaim:
+            claimName: {{ include "generic-chart.name" . }}
+  {{- end }}
+  {{- if .Values.volumes -}}
+    {{- toYaml .Values.volumes | nindent 8 }}
+  {{- end }}
+{{- end }}
+{{- if or .Values.affinity .Values.defaultAffinityRules.enabled }}
       affinity:
-        {{- toYaml . | nindent 8 }}
-    {{- end }}
-    {{- with .Values.tolerations }}
+  {{- if .Values.defaultAffinityRules.enabled }}
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                      - {{ include "generic-chart.name" . }}
+                  - key: release
+                    operator: In
+                    values:
+                      - {{ .Release.Name }}
+              topologyKey: "kubernetes.io/hostname"
+{{- end }}
+{{- if .Values.affinity -}}
+{{- toYaml .Values.affinity | nindent 8 }}
+{{- end }}
+{{- end }}
+{{- with .Values.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
-    {{- end }}
+{{- end }}

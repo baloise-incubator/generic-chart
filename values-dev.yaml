@@ -11,19 +11,62 @@ securityContext: {}
 service:
   type: ClusterIP
   port: 8080
-route:
-  enabled: false
-  host: demo-app.chapp-test.os1.balgroupit.com
+ingress:
+  enabled: true
+  zone: ch
   path: /
-livenessProbe:
+env:
+  - name: DEMO_VARIABLE
+    value: "Demo Variable"
+envFrom:
+  - configMapRef:
+      name: demo-cm
+persistence:
+  enabled: true
+  accessModes: ReadWriteOnce
+  storageClass: trident-nfs-snapshot
+  size: 1Gi
+  volumeMountPath: /var/app/data/
+volumes:
+  - name: config-volume
+    configMap:
+      name: demo-cm
+volumeMounts:
+  - name: demo
+    mountPath: /var/demo/data
+readinessProbe:
   httpGet:
     path: /
     port: http
-readinessProbe:
-resources: {}
+livenessProbe:
+  exec:
+    command:
+      - /bin/bash
+      - '-c'
+      - timeout 60 /opt/app/bin/livenessProbe.sh
+  timeoutSeconds: 1
+  periodSeconds: 10
+  successThreshold: 1
+  failureThreshold: 3
+resources:
+  requests:
+    cpu: 500m
+    memory: 1Gi
+  limits:
+    cpu: 2
+    memory: 1.5Gi
 nodeSelector: {}
 tolerations: []
-affinity: {}
-env: []
-envFrom: []
+affinity:
+  podAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      - labelSelector:
+          matchExpressions:
+            - key: app
+              operator: In
+              values:
+                - redis
+        topologyKey: "kubernetes.io/hostname"
+defaultAffinityRules:
+  enabled: true
 annotations: {}
