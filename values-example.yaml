@@ -1,0 +1,42 @@
+replicaCount: 2
+revisionHistoryLimit: 1
+image:
+  repository: registry.baloise.dev/example/nginx-sample
+  tag: latest
+  pullPolicy: IfNotPresent
+imagePullSecrets: []
+nameOverride: ""
+podSecurityContext: {}
+securityContext: {}
+service:
+  type: ClusterIP
+  port: 8080
+ingress:
+  enabled: true
+  path: /
+env:
+  - name: DEMO_VARIABLE
+    value: "Demo Variable"
+envFrom: []
+persistence: {}
+volumes: {}
+volumeMounts: {}
+readinessProbe:
+  httpGet:
+    path: /
+    port: 8080
+  initialDelaySeconds: 5
+  timeoutSeconds: 1
+livenessProbe: {}
+resources:
+  requests:
+    cpu: 10m
+    memory: 16Mi
+  limits:
+    cpu: 100m
+    memory: 32Mi
+nodeSelector: {}
+tolerations: []
+affinity: {}
+defaultAffinityRules: {}
+annotations: {}

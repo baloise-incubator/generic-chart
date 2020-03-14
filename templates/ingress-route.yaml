@@ -1,0 +1,21 @@
+{{ if and .Values.ingress.enabled (eq "Route" .Values.ingress.controller) }}
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  labels:
+{{ include "generic-chart.labels" . | indent 4 }}
+  name: {{ include "generic-chart.name" . }}
+spec:
+  host: {{ .Values.ingress.host }}
+  path: {{ .Values.ingress.path }}
+  port:
+    targetPort: http
+  tls:
+    insecureEdgeTerminationPolicy: Redirect
+    termination: edge
+  to:
+    kind: Service
+    name: {{ include "generic-chart.name" . }}
+    weight: 100
+  wildcardPolicy: None
+{{- end }}
