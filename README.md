@@ -14,7 +14,8 @@ This chart is a template for common Kubernetes resource manifests, which should 
 | **imagePullSecrets** | Reference a `Secret` which should be use to authenticate against a container registry | `nil` |
 | **nameOverride** | Override the fullname with this name | "" |
 | **service.type** | `Service` type (`ClusterIP`, `NodePort`, `ExternalName`) | `ClusterIP` |
-| **service.port** | Port number of the application (e.g. 8080, 8443). cannot be below 1024 by default | `8080` |
+| **ports.http.servicePort** | Port number of the service (e.g. 80, 8080). by default | `80` |
+| **ports.http.containerPort** | Port number of the application (e.g. 8080, 8443). cannot be below 1024 by default | `8080` |
 | **ingress.enabled** | If `true` an exposing resource for the `Service` is created (e.g. Route or Ingress) | `false` |
 | **ingress.controller** | Sets the type of the ingress controller (e.g. Route, Ingress) | `Route` |
 | **ingress.host** | Hostname of the exposing resource (e.g. demo-app.apps.example.tld) | `nil` |
