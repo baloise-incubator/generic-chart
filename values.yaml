@@ -8,7 +8,10 @@ imagePullSecrets: []
 nameOverride: ""
 service:
   type: ClusterIP
-  port: 8080
+ports:
+  http:
+    servicePort: 80
+    containerPort: 8080
 ingress:
   controller: Route
   enabled: false
