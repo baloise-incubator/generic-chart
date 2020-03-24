@@ -23,6 +23,7 @@ envFrom:
       name: demo-cm
 persistence:
   enabled: true
+  name: DemoPVC
   accessModes: ReadWriteOnce
   storageClass: trident-nfs-snapshot
   size: 1Gi

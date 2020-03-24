@@ -4,7 +4,7 @@ kind: PersistentVolumeClaim
 metadata:
   labels:
 {{ include "generic-chart.labels" . | indent 4 }}
-  name: {{ include "generic-chart.name" . }}
+  name: {{ .Values.persistence.name | default include "generic-chart.name" . }}
 spec:
   accessModes:
     - {{ .Values.persistence.accessModes }}
