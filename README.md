@@ -19,6 +19,7 @@ This chart is a template for common Kubernetes resource manifests, which should 
 | **ingress.controller** | Sets the type of the ingress controller (e.g. Route, Ingress) | `Route` |
 | **ingress.host** | Hostname of the exposing resource (e.g. demo-app.chapp-test.os1.balgroupit.com) | `nil` |
 | **ingress.zone** | If set to `ch` or `sh` and `ingress.host` is `nil`, the hostname is generated (~ $CHART_NAME-$RELEASE_NAME.$ZONE$ENV.os1.balgroupit.com) | `nil` |
+| **ingress.annotations** | Sets [`annotations`](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) for the `Route` | `{}` |
 | **env** | List of environment variables for the `Deployment` | `[]` |
 | **envFrom** | Set environment variables from a `ConfigMap` or `Secret`. See [`envFrom`](https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-configmap/#configure-all-key-value-pairs-in-a-configmap-as-container-environment-variables) | `nil` |
 | **persistence.enabled** | If `true` a [`PVC`](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) is created | `false` |

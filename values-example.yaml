@@ -15,6 +15,7 @@ ingress:
   enabled: true
   zone: ch
   path: /
+  annotations: {}
 env:
   - name: DEMO_VARIABLE
     value: "Demo Variable"

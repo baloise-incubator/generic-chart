@@ -12,6 +12,7 @@ service:
 ingress:
   controller: Route
   enabled: false
+  annotations: {}
 #  host: demo-app.chapp-test.os1.balgroupit.com
 #  zone: ch
   path: /
