@@ -15,7 +15,8 @@ ingress:
   enabled: true
   zone: ch
   path: /
-  annotations: {}
+  annotations:
+    haproxy.router.openshift.io/timeout: 5m
 env:
   - name: DEMO_VARIABLE
     value: "Demo Variable"
