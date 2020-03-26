@@ -15,8 +15,8 @@ ports:
 ingress:
   controller: Route
   enabled: false
-#  host: demo-app.apps.example.tld
-#  zone: ch
+  annotations: {}
+  #  host: demo-app.apps.example.tld
   path: /
 env: []
 envFrom: []

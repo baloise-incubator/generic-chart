@@ -5,6 +5,10 @@ metadata:
   labels:
 {{ include "generic-chart.labels" . | indent 4 }}
   name: {{ include "generic-chart.name" . }}
+{{- if .Values.ingress.annotations}}
+  annotations:
+    {{- toYaml .Values.ingress.annotations | nindent 4 }}
+{{- end }}
 spec:
   host: {{ .Values.ingress.host }}
   path: {{ .Values.ingress.path }}
