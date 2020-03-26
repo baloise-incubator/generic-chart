@@ -22,6 +22,7 @@ This chart is a template for common Kubernetes resource manifests, which should 
 | **env** | List of environment variables for the `Deployment` | `[]` |
 | **envFrom** | Set environment variables from a `ConfigMap` or `Secret`. See [`envFrom`](https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-configmap/#configure-all-key-value-pairs-in-a-configmap-as-container-environment-variables) | `nil` |
 | **persistence.enabled** | If `true` a [`PVC`](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) is created | `false` |
+| **persistence.name** | The name of the PVC | `generic-chart.name` |
 | **persistence.accessModes** | [`accessModes`](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes) of the PVC (ReadWriteOnce, ReadWriteMany) | `ReadWriteOnce` |
 | **persistence.storageClass** | [`storageClass`] of the PVC (trident-nfs-snapshot, trident-nfs) | `trident-nfs-snapshot` |
 | **persistence.size** | Size of the PVC (e.g. 512Mi, 10Gi, 1Ti) | `nil` |
