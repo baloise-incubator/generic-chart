@@ -7,10 +7,20 @@ metadata:
 spec:
   type: {{ .Values.service.type }}
   ports:
-    - port: {{ .Values.service.port }}
-      targetPort: http
-      protocol: TCP
-      name: http
+{{- if or .Values.service.ports }}
+{{- range  .Values.service.ports }}
+    {{- $name := default "http" .name }}    
+  - name:  {{ $name }}        
+    targetPort: {{ default $name .targetPort }}
+    protocol: {{ default "TCP" .protocol }}
+    port: {{ required "Please enter a valid port! " .port }}
+{{- end}}
+{{ else }}
+  - port: {{ .Values.service.port }}
+    targetPort: http
+    protocol: TCP
+    name: http
+{{- end}}    
   selector:
     app: {{ include "generic-chart.name" . }}
     release: {{ .Release.Name }}
