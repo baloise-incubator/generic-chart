@@ -35,10 +35,11 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
         {{- if .Values.service.ports }}
-        {{- range  .Values.service.ports }}        
-            - name:  {{ default "http" .name }}          
-              containerPort: {{ required "Please enter a valid port! " .port }}
-              protocol: {{ default "TCP" .protocol }}
+        {{- range $key, $val := .Values.service.ports }}
+            - name: {{ default "http" $key }}
+        {{- $name := default "http" $key | trim }}
+              containerPort: {{ required "Please enter a valid port! " $val.port }}
+              protocol: {{ default "TCP" $val.protocol }}        
         {{- end}}
         {{ else }}
             - name: http
