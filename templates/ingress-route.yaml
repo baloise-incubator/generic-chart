@@ -23,12 +23,6 @@ spec:
     weight: 100
   wildcardPolicy: None
 status:
-  ingress:
-    {{ if eq .Values.ingress.zone "ch" }}
-      host: {{ include "generic-chart.host" .}}
-      routerName: router-ch-nonprod
-    {{ else }}
-      host: {{ include "generic-chart.host" .}}
-      routerName: router-shared-nonprod
-    {{- end}}
+  ingress:    
+    - routerName: router
 {{- end }}
