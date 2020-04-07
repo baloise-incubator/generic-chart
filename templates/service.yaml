@@ -1,4 +1,4 @@
-{{ if .Values.service.ports }}
+{{ if .Values.ports }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -8,10 +8,10 @@ metadata:
 spec:
   type: {{ .Values.service.type }}
   ports:  
-  {{- range $key, $val := .Values.service.ports }}
+  {{- range $key, $val := .Values.ports }}
   - name: {{ $key }}
-    {{- $name := default "http" $key }}
-    port: {{ required "Please enter a valid port! " $val.port }}
+    {{- $name := $key }}
+    port: {{ required "Please enter a valid port! " $val.serviceport }}
     protocol: {{ default "TCP" $val.protocol }}
     targetPort: {{ default $name $val.targetPort}} 
   {{- end}}

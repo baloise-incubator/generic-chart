@@ -34,12 +34,15 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
-        {{- if .Values.service.ports }}
-        {{- range $key, $val := .Values.service.ports }}
-            - name: {{ default "http" $key }}
-        {{- $name := default "http" $key | trim }}
-              containerPort: {{ required "Please enter a valid port! " $val.port }}
-              protocol: {{ default "TCP" $val.protocol }}        
+        {{- if .Values.ports }}
+        {{- range $key, $val := .Values.ports }}
+            - name: {{ $key }} {{- if $val.containerport }}     
+              containerPort: {{ required "Please enter a valid port! " $val.containerport }}
+              protocol: {{ default "TCP" $val.protocol }}
+            {{ else }}
+              containerPort: {{ required "Please enter a valid port! "  $val.serviceport }}
+              protocol: {{ default "TCP" $val.protocol }}
+            {{- end}}         
         {{- end}}
         {{ else }}
             - name: http
