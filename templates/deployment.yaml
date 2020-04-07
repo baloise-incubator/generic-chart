@@ -1,7 +1,8 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "generic-chart.name" . }}
+  {{ $appName := include "generic-chart.name" . }}
+  name: {{ $appName }}
   labels:
 {{ include "generic-chart.labels" . | indent 4 }}
 spec:
@@ -66,12 +67,12 @@ spec:
           envFrom:
             {{- toYaml .Values.envFrom | nindent 12 }}
 {{- end }}
-{{- if or .Values.volumeMounts .Values.persistence.volumeMountPath }}
+{{- if or .Values.volumeMounts .Values.persistence.volumeMounts }}
           volumeMounts:
-{{- if .Values.persistence.volumeMountPath }}
-            - mountPath: {{ .Values.persistence.volumeMountPath }}
-              name: {{ include "generic-chart.name" . }}
-{{- end }}
+       {{- range $key, $val := .Values.persistence.volumeMounts }}
+            - mountPath: {{ $val.path }}
+              name: {{ $appName }}
+       {{- end}}
 {{- if .Values.volumeMounts -}}
             {{- toYaml .Values.volumeMounts | nindent 12 }}
 {{- end }}
@@ -82,17 +83,23 @@ spec:
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-{{- if or .Values.volumes .Values.persistence.volumeMountPath }}
+{{- if or .Values.volumes .Values.persistence.volumeMounts }}
       volumes:
-  {{- if .Values.persistence.volumeMountPath }}
-        - name: {{ include "generic-chart.name" . }}
+  {{- if .Values.persistence.volumeMounts }}
+        - name: {{ .Values.persistence.name }}
+        {{- if .Values.persistence.claimname }}
           persistentVolumeClaim:
-            claimName: {{ include "generic-chart.name" . }}
+            claimName: {{ .Values.persistence.claimname }}
+        {{ else }}
+          persistentVolumeClaim:
+            claimName: {{ .Values.persistence.name }}
+        {{- end}}
   {{- end }}
   {{- if .Values.volumes -}}
     {{- toYaml .Values.volumes | nindent 8 }}
   {{- end }}
 {{- end }}
+
 {{- if or .Values.affinity .Values.defaultAffinityRules.enabled }}
       affinity:
   {{- if .Values.defaultAffinityRules.enabled }}
