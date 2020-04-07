@@ -24,6 +24,12 @@ envFrom: []
 persistence: {}
 volumes: {}
 volumeMounts: {}
+# e.g. multiple Volumemounts
+volumeMounts:
+      - mountPath: /usr/local/sometool
+        name: mytool
+      - mountPath: /var/log/something
+        name: mysomething
 readinessProbe:
   httpGet:
     path: /
