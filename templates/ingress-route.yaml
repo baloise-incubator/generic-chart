@@ -23,6 +23,6 @@ spec:
     weight: 100
   wildcardPolicy: None
 status:
-  ingress:    
+  ingress:
     - routerName: router
 {{- end }}

@@ -9,11 +9,10 @@ spec:
   type: {{ .Values.service.type }}
   ports:  
   {{- range $key, $val := .Values.ports }}
-  - name: {{ $key }}
-    {{- $name := $key }}
+  - name: {{ $key }}    
     port: {{ required "Please enter a valid port! " $val.servicePort }}
     protocol: {{ default "TCP" $val.protocol }}
-    targetPort: {{ default $name $val.targetPort}} 
+    targetPort: {{ default $key $val.targetPort}} 
   {{- end}}
 
   selector:

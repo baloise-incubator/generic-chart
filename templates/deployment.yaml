@@ -1,8 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
-metadata:
-  {{ $appName := include "generic-chart.name" . }}
-  name: {{ $appName }}
+metadata:  
+  name: {{ include "generic-chart.name" . }}
   labels:
 {{ include "generic-chart.labels" . | indent 4 }}
 spec:
@@ -84,24 +83,7 @@ spec:
   {{- if .Values.volumes -}}
     {{- toYaml .Values.volumes | nindent 8 }}
   {{- end }}
-{{- end }}
-          resources:
-            {{- toYaml .Values.resources | nindent 12 }}
-      {{- with .Values.nodeSelector }}
-      nodeSelector:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-{{- if or .Values.volumes .Values.persistence.volumeMountPath }}
-      volumes:
-  {{- if .Values.persistence.volumeMountPath }}
-        - name: {{ include "generic-chart.name" . }}
-          persistentVolumeClaim:
-            claimName: {{ include "generic-chart.name" . }}
-  {{- end }}
-  {{- if .Values.volumes -}}
-    {{- toYaml .Values.volumes | nindent 8 }}
-  {{- end }}
-{{- end }}
+{{- end }}         
 {{- if or .Values.affinity .Values.defaultAffinityRules.enabled }}
       affinity:
   {{- if .Values.defaultAffinityRules.enabled }}
