@@ -1,12 +1,12 @@
 {{ if (eq "Route" .Values.ingress.controller) }}
-{{- range $key, $val := .Values.ports }}
+{{- range $key, $val := .Values.network }}
 {{- if not (kindIs "invalid" $val.ingress) }}
 {{- if and (not $val.ingress.host) (not $.Values.ingress.zone) }}
 {{- fail "either .ports.{}.ports.ingress.host or .ingress.zone must be set" }}
 {{- end -}}
 ---
 apiVersion: route.openshift.io/v1
-kind: Route:
+kind: Route
 metadata:
   labels:
 {{ include "generic-chart.labels" $ | indent 4 }}

@@ -8,7 +8,7 @@ imagePullSecrets: []
 nameOverride: ""
 podSecurityContext: {}
 securityContext: {}
-ports:
+network:
   data:
     servicePort: 8088
     ingress:  {}

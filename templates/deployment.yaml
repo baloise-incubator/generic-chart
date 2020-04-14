@@ -34,8 +34,8 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
-        {{- if .Values.ports }}
-        {{- range $key, $val := .Values.ports }}
+        {{- if .Values.network }}
+        {{- range $key, $val := .Values.network }}
             - name: {{ $key }}             
               containerPort: {{ default $val.servicePort $val.containerPort }}
               protocol: {{ default "TCP" $val.protocol }} 
@@ -85,7 +85,7 @@ spec:
         persistentVolumeClaim:
           claimName: {{ .Values.persistence.name }}
   {{- end }}
-{{- end }}         
+{{- end }}
 {{- if or .Values.affinity .Values.defaultAffinityRules.enabled }}
       affinity:
   {{- if .Values.defaultAffinityRules.enabled }}
