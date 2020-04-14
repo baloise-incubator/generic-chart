@@ -71,3 +71,5 @@ affinity:
 defaultAffinityRules:
   enabled: true
 annotations: {}
+labels:
+  maistra.io/expose-route: 'true'

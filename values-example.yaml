@@ -42,3 +42,4 @@ tolerations: []
 affinity: {}
 defaultAffinityRules: {}
 annotations: {}
+labels: {}

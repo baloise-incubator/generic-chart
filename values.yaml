@@ -45,3 +45,4 @@ affinity: {}
 defaultAffinityRules:
   enabled: true
 annotations: {}
+labels: {}
