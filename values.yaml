@@ -46,3 +46,4 @@ affinity: {}
 defaultAffinityRules:
   enabled: true
 annotations: {}
+command: []

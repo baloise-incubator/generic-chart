@@ -67,3 +67,6 @@ tolerations: []
 affinity: {}
 defaultAffinityRules: {}
 annotations: {}
+command:
+  - /app
+  - --debug
