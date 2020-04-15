@@ -20,9 +20,9 @@ network:
     servicePort: 9090
     ingress:
       host: abcz-chapp-balgroupit.com
-      annotations: 
+      annotations:
         haproxy.router.openshift.io/timeout: 5m
-  gui: 
+  gui:
     servicePort: 8443
 ingress: 
   zone: ch

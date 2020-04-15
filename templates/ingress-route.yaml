@@ -1,8 +1,8 @@
-{{ if (eq "Route" .Values.ingress.controller) }}
+{{ if and (.Values.network) (eq "Route" .Values.ingress.controller) }}
 {{- range $key, $val := .Values.network }}
 {{- if not (kindIs "invalid" $val.ingress) }}
 {{- if and (not $val.ingress.host) (not $.Values.ingress.zone) }}
-{{- fail "either .ports.{}.ports.ingress.host or .ingress.zone must be set" }}
+{{- fail "either .network.{}.ingress.host or .ingress.zone must be set" }}
 {{- end -}}
 ---
 apiVersion: route.openshift.io/v1
