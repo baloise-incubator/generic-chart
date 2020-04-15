@@ -13,13 +13,14 @@ This chart is a template for common Kubernetes resource manifests, which should 
 | **image.pullPolicy** | The pull policy when a image should be pulled (`IfNotPresent`, `Always`) | `IfNotPresent` |
 | **imagePullSecrets** | Reference a `Secret` which should be use to authenticate against a container registry | `nil` |
 | **nameOverride** | Override the fullname with this name | "" |
+| **network.{}.servicePort** | Port number of the application (e.g. 8080, 8443). cannot be below 1024 by default. Per default the port `8080` is exposed via a `Service` | `nil` |
+| **network.{}.containerPort** | The port which is exposed on the `Pod`. If `nil` corresponds to the `network.{}.servicePort` | `nil` |
+| **network.{}.ingress.host** | Create an `Ingress` or `Route` for the `Service` and its `servicePort`. If `nil` see `ingress.zone` | `nil` |
+| **network.{}.ingress.annotations** | Sets [`annotations`](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) for the `Ingress` or `Route` instance | `{}` |
+| **network.{}.ingress.path** | Sets the path for the `Ingress` or `Route` instance | `/` |
 | **service.type** | `Service` type (`ClusterIP`, `NodePort`, `ExternalName`) | `ClusterIP` |
-| **service.port** | Port number of the application (e.g. 8080, 8443). cannot be below 1024 by default | `8080` |
-| **ingress.enabled** | If `true` an exposing resource for the `Service` is created (e.g. Route or Ingress) | `false` |
 | **ingress.controller** | Sets the type of the ingress controller (e.g. Route, Ingress) | `Route` |
-| **ingress.host** | Hostname of the exposing resource (e.g. demo-app.chapp-test.os1.balgroupit.com) | `nil` |
-| **ingress.zone** | If set to `ch` or `sh` and `ingress.host` is `nil`, the hostname is generated (~ $CHART_NAME-$RELEASE_NAME.$ZONE$ENV.os1.balgroupit.com) | `nil` |
-| **ingress.annotations** | Sets [`annotations`](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) for the `Ingress` or `Route` instance | `{}` |
+| **ingress.zone** | If set to `ch` or `sh` and `network.{}.ingress.host` is `nil`, the hostname is generated (~ $CHART_NAME-$RELEASE_NAME.$ZONE$ENV.os1.balgroupit.com) | `nil` |
 | **env** | List of environment variables for the `Deployment` | `[]` |
 | **envFrom** | Set environment variables from a `ConfigMap` or `Secret`. See [`envFrom`](https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-configmap/#configure-all-key-value-pairs-in-a-configmap-as-container-environment-variables) | `nil` |
 | **persistence.enabled** | If `true` a [`PVC`](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) is created | `false` |
