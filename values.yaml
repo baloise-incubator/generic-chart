@@ -6,6 +6,10 @@ image:
   pullPolicy: IfNotPresent
 imagePullSecrets: []
 nameOverride: ""
+serviceAccount:
+  create: true
+  name:
+  automountServiceAccountToken: false
 network:
   http:
     servicePort: 8080

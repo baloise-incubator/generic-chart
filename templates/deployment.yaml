@@ -21,6 +21,7 @@ spec:
         app: {{ include "generic-chart.name" . }}
         release: {{ .Release.Name }}
     spec:
+      serviceAccountName: {{ template "generic-chart.serviceAccountName" . }}
     {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}

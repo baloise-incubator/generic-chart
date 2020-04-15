@@ -38,3 +38,14 @@ and `.Values.ingress.zone` ("ch" or "shared")
     {{- printf "%s.%sapp%s.os1.balgroupit.com" $base $prefix $suffix -}}
   {{- end -}}
 {{- end -}}
+
+{{/*
+Create the name of the service account to use
+*/}}
+{{- define "generic-chart.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create -}}
+{{ default (include "generic-chart.name" .) .Values.serviceAccount.name }}
+{{- else -}}
+{{ default "default" .Values.serviceAccount.name }}
+{{- end -}}
+{{- end -}}

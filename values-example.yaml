@@ -8,6 +8,10 @@ imagePullSecrets: []
 nameOverride: ""
 podSecurityContext: {}
 securityContext: {}
+serviceAccount:
+  create: true
+  name:
+  automountServiceAccountToken: true
 network:
   data:
     servicePort: 8088
