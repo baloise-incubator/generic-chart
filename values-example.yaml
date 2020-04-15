@@ -12,39 +12,38 @@ network:
   data:
     servicePort: 8088
     ingress:  {}
-
   ui:
     servicePort: 9090
     ingress:
       host: abcz-chapp-balgroupit.com
       annotations: 
         haproxy.router.openshift.io/timeout: 5m
-  
   gui: 
     servicePort: 8443
-
 ingress: 
   zone: ch
-
 service:
   type: ClusterIP
-    
 env:
   - name: DEMO_VARIABLE
     value: "Demo Variable"
 envFrom: []
-persistence: {}
-volumes: {}
-volumeMounts: {}
-# e.g. multiple Volumemounts
+persistence:
+  name: data
+  storageClass: custom-storage-class
+  enabled: true
+  accessModes: ReadWriteMany
+  size: 100Mi
+  volumeMountPath: /app/data
+volumes:
+  - name: config-volume
+    configMap:
+      name: special-config
 volumeMounts:
-      - mountPath: /usr/local/sometool
-        name: mytool
-      - mountPath: /var/log/something
-        name: mysomething
-      - mountPath: /etc/nginx/nginx.conf
-        name: nginx-conf
-        subPath: nginx.conf
+  - mountPath: /usr/local/sometool
+    name: special-config
+  - mountPath: /var/data
+    name: data
 readinessProbe:
   httpGet:
     path: /

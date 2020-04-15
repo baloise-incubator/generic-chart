@@ -16,11 +16,7 @@ metadata:
     {{- toYaml $val.ingress.annotations | nindent 4 }}
 {{- end }}
 spec:
- {{- if $val.ingress.host }}
-  host: {{ $val.ingress.host }}
- {{- else }}
-  host: {{ printf "%s-%s" $key (include "generic-chart.host" $) }}
- {{- end }}
+  host: {{ if $val.ingress.host }}{{ $val.ingress.host }}{{ else }}{{ printf "%s-%s" $key (include "generic-chart.host" $) }}{{ end }}
   path: {{ default "/" $val.ingress.path }}
   port:
     targetPort: {{ $key }}    

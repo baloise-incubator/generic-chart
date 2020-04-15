@@ -13,9 +13,11 @@ This chart is a template for common Kubernetes resource manifests, which should 
 | **image.pullPolicy** | The pull policy when a image should be pulled (`IfNotPresent`, `Always`) | `IfNotPresent` |
 | **imagePullSecrets** | Reference a `Secret` which should be use to authenticate against a container registry | `nil` |
 | **nameOverride** | Override the fullname with this name | "" |
-| **network.{}.servicePort** | Port number of the application (e.g. 8080, 8443). cannot be below 1024 by default. Per default the port `8080` is exposed via a `Service` | `nil` |
+| **network** | Map of ports which should be exposed. Adds `ports` section to the Pod template, adds `ports` section to Service and can create `Ingress` or `Route` for the ports. | `network.http.servicePort: 8080` |
+| **network.{}.servicePort** | Port number of the `Service` (e.g. 8080, 8443). If `nil` no port on the `Service` is exposed | `nil` |
 | **network.{}.containerPort** | The port which is exposed on the `Pod`. If `nil` corresponds to the `network.{}.servicePort` | `nil` |
-| **network.{}.ingress.host** | Create an `Ingress` or `Route` for the `Service` and its `servicePort`. If `nil` see `ingress.zone` | `nil` |
+| **network.{}.ingress** | If not `nil` creates an `Ingress` or `Route` for the `Service` and its `servicePort`. If set to `{}` see `ingress.zone` | `nil` |
+| **network.{}.ingress.host** | Sets the hostname for the `Ingress` or `Route`. If `nil` see `ingress.zone` | `nil` |
 | **network.{}.ingress.annotations** | Sets [`annotations`](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) for the `Ingress` or `Route` instance | `{}` |
 | **network.{}.ingress.path** | Sets the path for the `Ingress` or `Route` instance | `/` |
 | **service.type** | `Service` type (`ClusterIP`, `NodePort`, `ExternalName`) | `ClusterIP` |
@@ -28,7 +30,7 @@ This chart is a template for common Kubernetes resource manifests, which should 
 | **persistence.accessModes** | [`accessModes`](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes) of the PVC (ReadWriteOnce, ReadWriteMany) | `ReadWriteOnce` |
 | **persistence.storageClass** | [`storageClass`] of the PVC (trident-nfs-snapshot, trident-nfs) | `trident-nfs-snapshot` |
 | **persistence.size** | Size of the PVC (e.g. 512Mi, 10Gi, 1Ti) | `nil` |
-| **persistence.volumeMount** | Path where to volume should be mounted (e.g. `/var/data/`). If set, `volumes` and `volumeMounts` are configured | `nil` |
+| **persistence.volumeMountPath** | Path where to volume should be mounted (e.g. `/var/data/`). If set, `volumes` and `volumeMounts` are configured | `nil` |
 | **volumes** | Set [`Volumes`](https://kubernetes.io/docs/concepts/storage/volumes/) available to the `Pod` | `[]` |
 | **volumeMounts** | Mounts a [`Volume`](https://kubernetes.io/docs/concepts/storage/volumes/) defined in `volumes` in the container. | `[]` |
 | **readinessProbe** | Defines the [`readinessProbe`](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) | `{}` |

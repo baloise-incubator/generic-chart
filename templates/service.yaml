@@ -7,15 +7,16 @@ metadata:
 {{ include "generic-chart.labels" . | indent 4 }}
 spec:
   type: {{ .Values.service.type }}
-  ports:  
+  ports:
   {{- range $key, $val := .Values.network }}
+  {{- if $val.servicePort}}
   - name: {{ $key }}    
-    port: {{ required "Please enter a valid port! " $val.servicePort }}
+    port: {{ $val.servicePort }}
     protocol: {{ default "TCP" $val.protocol }}
-    targetPort: {{ default $key $val.targetPort}} 
-  {{- end}}
-
+    targetPort: {{ default $key $val.targetPort }}
+  {{- end }}
+  {{- end }}
   selector:
     app: {{ include "generic-chart.name" . }}
     release: {{ .Release.Name }}
-{{- end}}
+{{- end }}
