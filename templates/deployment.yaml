@@ -1,6 +1,6 @@
 apiVersion: apps/v1
 kind: Deployment
-metadata:
+metadata:  
   name: {{ include "generic-chart.name" . }}
   labels:
 {{ include "generic-chart.labels" . | indent 4 }}
@@ -34,9 +34,13 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
-            - name: http
-              containerPort: {{ .Values.service.port }}
-              protocol: TCP
+        {{- if .Values.network }}
+        {{- range $key, $val := .Values.network }}
+            - name: {{ $key }}             
+              containerPort: {{ default $val.servicePort $val.containerPort }}
+              protocol: {{ default "TCP" $val.protocol }} 
+        {{- end }}
+        {{- end }}
 {{- if gt (len .Values.livenessProbe) 0 }}
           livenessProbe:
             {{- toYaml .Values.livenessProbe | nindent 12 }}
@@ -56,8 +60,8 @@ spec:
 {{- if or .Values.volumeMounts .Values.persistence.volumeMountPath }}
           volumeMounts:
 {{- if .Values.persistence.volumeMountPath }}
-            - mountPath: {{ .Values.persistence.volumeMountPath }}
-              name: {{ include "generic-chart.name" . }}
+          - mountPath: {{ .Values.persistence.volumeMountPath | nindent 6}}
+            name: {{ include "generic-chart.name" . }}
 {{- end }}
 {{- if .Values.volumeMounts -}}
             {{- toYaml .Values.volumeMounts | nindent 12 }}
@@ -69,15 +73,17 @@ spec:
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-{{- if or .Values.volumes .Values.persistence.volumeMountPath }}
+{{- if or .Values.persistence .Values.persistence.volumeMountPath }}
       volumes:
   {{- if .Values.persistence.volumeMountPath }}
         - name: {{ include "generic-chart.name" . }}
           persistentVolumeClaim:
             claimName: {{ include "generic-chart.name" . }}
   {{- end }}
-  {{- if .Values.volumes -}}
-    {{- toYaml .Values.volumes | nindent 8 }}
+  {{- if .Values.persistence.name }}            
+      - name: {{ .Values.persistence.name }}
+        persistentVolumeClaim:
+          claimName: {{ .Values.persistence.name }}
   {{- end }}
 {{- end }}
 {{- if or .Values.affinity .Values.defaultAffinityRules.enabled }}

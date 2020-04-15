@@ -6,16 +6,15 @@ image:
   pullPolicy: IfNotPresent
 imagePullSecrets: []
 nameOverride: ""
+network:
+  http:
+    servicePort: 8080
+#    ingress:
+#      host: application-test.chapp-test.os1.balgroupit.com
 service:
   type: ClusterIP
-  port: 8080
 ingress:
   controller: Route
-  enabled: false
-  annotations: {}
-#  host: demo-app.chapp-test.os1.balgroupit.com
-#  zone: ch
-  path: /
 env: []
 envFrom: []
 persistence:

@@ -1,3 +1,4 @@
+{{ if .Values.network }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -6,11 +7,15 @@ metadata:
 {{ include "generic-chart.labels" . | indent 4 }}
 spec:
   type: {{ .Values.service.type }}
-  ports:
-    - port: {{ .Values.service.port }}
-      targetPort: http
-      protocol: TCP
-      name: http
+  ports:  
+  {{- range $key, $val := .Values.network }}
+  - name: {{ $key }}    
+    port: {{ required "Please enter a valid port! " $val.servicePort }}
+    protocol: {{ default "TCP" $val.protocol }}
+    targetPort: {{ default $key $val.targetPort}} 
+  {{- end}}
+
   selector:
     app: {{ include "generic-chart.name" . }}
     release: {{ .Release.Name }}
+{{- end}}

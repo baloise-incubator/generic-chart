@@ -8,15 +8,27 @@ imagePullSecrets: []
 nameOverride: ""
 podSecurityContext: {}
 securityContext: {}
+network:
+  data:
+    servicePort: 8088
+    ingress:  {}
+
+  ui:
+    servicePort: 9090
+    ingress:
+      host: abcz-chapp-balgroupit.com
+      annotations: 
+        haproxy.router.openshift.io/timeout: 5m
+  
+  gui: 
+    servicePort: 8443
+
+ingress: 
+  zone: ch
+
 service:
   type: ClusterIP
-  port: 8080
-ingress:
-  enabled: true
-  zone: ch
-  path: /
-  annotations:
-    haproxy.router.openshift.io/timeout: 5m
+    
 env:
   - name: DEMO_VARIABLE
     value: "Demo Variable"
@@ -24,6 +36,15 @@ envFrom: []
 persistence: {}
 volumes: {}
 volumeMounts: {}
+# e.g. multiple Volumemounts
+volumeMounts:
+      - mountPath: /usr/local/sometool
+        name: mytool
+      - mountPath: /var/log/something
+        name: mysomething
+      - mountPath: /etc/nginx/nginx.conf
+        name: nginx-conf
+        subPath: nginx.conf
 readinessProbe:
   httpGet:
     path: /
