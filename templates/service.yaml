@@ -5,6 +5,10 @@ metadata:
   name: {{ include "generic-chart.name" . }}
   labels:
 {{ include "generic-chart.labels" . | indent 4 }}
+{{- if gt (len .Values.service.annotations) 0 }}
+  annotations:
+{{- toYaml .Values.service.annotations | nindent 4 }}
+{{- end }}
 spec:
   type: {{ .Values.service.type }}
   ports:

@@ -18,6 +18,7 @@ network:
 #      host: application-test.chapp-test.os1.balgroupit.com
 service:
   type: ClusterIP
+  annotations: {}
 ingress:
   controller: Route
 env: []
