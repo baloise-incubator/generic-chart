@@ -16,6 +16,7 @@ This chart is a template for common Kubernetes resource manifests, which should 
 | **serviceAccount.create** | If a `ServiceAccount` should be created. If `false` a `ServiceAccount` must be provided and configured correctly with its name under `serviceAccount.name`.  | `true` |
 | **serviceAccount.name** | Name of the `ServiceAccount`. If not set and create is true, a name is generated using the name template | `nil` |
 | **serviceAccount.automountServiceAccountToken** | If `true` the `Secret` with the `Token` and `Certificates`  of the `ServiceAccount` is mounted. Only required when access to the master API is necessary | `false` |
+| **serviceAccount.annotations** | Sets [`annotations`](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) for the `Service` | `{}` |
 | **network** | Map of ports which should be exposed. Adds `ports` section to the Pod template, adds `ports` section to Service and can create `Ingress` or `Route` for the ports. | `network.http.servicePort: 8080` |
 | **network.{}.servicePort** | Port number of the `Service` (e.g. 8080, 8443). If `nil` no port on the `Service` is exposed | `nil` |
 | **network.{}.containerPort** | The port which is exposed on the `Pod`. If `nil` corresponds to the `network.{}.servicePort` | `nil` |

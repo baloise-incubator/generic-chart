@@ -10,6 +10,7 @@ serviceAccount:
   create: true
   name:
   automountServiceAccountToken: false
+  annotations: {}
 network:
   http:
     servicePort: 8080
