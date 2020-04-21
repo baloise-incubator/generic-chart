@@ -13,17 +13,15 @@ serviceAccount:
   name:
   automountServiceAccountToken: true
 network:
-  data:
-    servicePort: 8088
+  api:
+    servicePort: 8080
     ingress:  {}
-  ui:
+  mgmt:
     servicePort: 9090
     ingress:
       host: abcz-chapp-balgroupit.com
       annotations:
         haproxy.router.openshift.io/timeout: 5m
-  gui:
-    servicePort: 8443
 ingress: 
   zone: ch
 service:
