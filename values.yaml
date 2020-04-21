@@ -6,24 +6,28 @@ image:
   pullPolicy: IfNotPresent
 imagePullSecrets: []
 nameOverride: ""
+serviceAccount:
+  create: true
+  name:
+  automountServiceAccountToken: false
+  annotations: {}
+network:
+  http:
+    servicePort: 8080
+#    ingress:
+#      host: demo-app.apps.example.tld
 service:
   type: ClusterIP
-ports:
-  http:
-    servicePort: 80
-    containerPort: 8080
+  annotations: {}
 ingress:
   controller: Route
-  enabled: false
-  annotations: {}
-  #  host: demo-app.apps.example.tld
-  path: /
 env: []
 envFrom: []
 persistence:
   enabled: false
   accessModes: ReadWriteOnce
-#  storageClass: ""
+  storageClass: ""
+  annotations: {}
 #  size: 1Gi
 #  volumeMount: /var/app/data/
 volumes: []
@@ -45,4 +49,4 @@ affinity: {}
 defaultAffinityRules:
   enabled: true
 annotations: {}
-labels: {}
+command: []

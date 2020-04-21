@@ -13,21 +13,29 @@ This chart is a template for common Kubernetes resource manifests, which should 
 | **image.pullPolicy** | The pull policy when a image should be pulled (`IfNotPresent`, `Always`) | `IfNotPresent` |
 | **imagePullSecrets** | Reference a `Secret` which should be use to authenticate against a container registry | `nil` |
 | **nameOverride** | Override the fullname with this name | "" |
+| **serviceAccount.create** | If a `ServiceAccount` should be created. If `false` a `ServiceAccount` must be provided and configured correctly with its name under `serviceAccount.name`.  | `true` |
+| **serviceAccount.name** | Name of the `ServiceAccount`. If not set and create is true, a name is generated using the name template | `nil` |
+| **serviceAccount.automountServiceAccountToken** | If `true` the `Secret` with the `Token` and `Certificates`  of the `ServiceAccount` is mounted. Only required when access to the master API is necessary | `false` |
+| **serviceAccount.annotations** | Sets [`annotations`](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) for the `ServiceAccount` | `{}` |
+| **network** | Map of ports which should be exposed. Adds `ports` section to the Pod template, adds `ports` section to Service and can create `Ingress` or `Route` for the ports. | `network.http.servicePort: 8080` |
+| **network.{}.servicePort** | Port number of the `Service` (e.g. 8080, 8443). If `nil` no port on the `Service` is exposed | `nil` |
+| **network.{}.containerPort** | The port which is exposed on the `Pod`. If `nil` corresponds to the `network.{}.servicePort` | `nil` |
+| **network.{}.ingress** | If not `nil` creates an `Ingress` or `Route` for the `Service` and its `servicePort`. If set to `{}` see `ingress.zone` | `nil` |
+| **network.{}.ingress.host** | Sets the hostname for the `Ingress` or `Route`. If `nil` see `ingress.zone` | `nil` |
+| **network.{}.ingress.annotations** | Sets [`annotations`](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) for the `Ingress` or `Route` instance | `{}` |
+| **network.{}.ingress.path** | Sets the path for the `Ingress` or `Route` instance | `/` |
 | **service.type** | `Service` type (`ClusterIP`, `NodePort`, `ExternalName`) | `ClusterIP` |
-| **ports.http.servicePort** | Port number of the service (e.g. 80, 8080). by default | `80` |
-| **ports.http.containerPort** | Port number of the application (e.g. 8080, 8443). cannot be below 1024 by default | `8080` |
-| **ingress.enabled** | If `true` an exposing resource for the `Service` is created (e.g. Route or Ingress) | `false` |
+| **service.annotations** | Sets [`annotations`](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) for the `Service` | `{}` |
 | **ingress.controller** | Sets the type of the ingress controller (e.g. Route, Ingress) | `Route` |
-| **ingress.host** | Hostname of the exposing resource (e.g. demo-app.apps.example.tld) | `nil` |
-| **ingress.annotations** | Sets [`annotations`](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) for the `Ingress` or `Route` instance | `{}` |
 | **env** | List of environment variables for the `Deployment` | `[]` |
 | **envFrom** | Set environment variables from a `ConfigMap` or `Secret`. See [`envFrom`](https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-configmap/#configure-all-key-value-pairs-in-a-configmap-as-container-environment-variables) | `nil` |
 | **persistence.enabled** | If `true` a [`PVC`](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) is created | `false` |
 | **persistence.name** | The name of the PVC | `generic-chart.name` |
 | **persistence.accessModes** | [`accessModes`](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes) of the PVC (ReadWriteOnce, ReadWriteMany) | `ReadWriteOnce` |
-| **persistence.storageClass** | [`storageClass`] of the PVC (trident-nfs-snapshot, trident-nfs) | `trident-nfs-snapshot` |
+| **persistence.storageClass** | [`storageClass`] of the PVC (trident-nfs-snapshot, trident-nfs) | `"trident-nfs-snapshot"` |
 | **persistence.size** | Size of the PVC (e.g. 512Mi, 10Gi, 1Ti) | `nil` |
-| **persistence.volumeMount** | Path where to volume should be mounted (e.g. `/var/data/`). If set, `volumes` and `volumeMounts` are configured | `nil` |
+| **persistence.volumeMountPath** | Path where to volume should be mounted (e.g. `/var/data/`). If set, `volumes` and `volumeMounts` are configured | `nil` |
+| **persistence.annotations** | Sets [`annotations`](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) for the `PersistentVolumeClaim` | `{}` |
 | **volumes** | Set [`Volumes`](https://kubernetes.io/docs/concepts/storage/volumes/) available to the `Pod` | `[]` |
 | **volumeMounts** | Mounts a [`Volume`](https://kubernetes.io/docs/concepts/storage/volumes/) defined in `volumes` in the container. | `[]` |
 | **readinessProbe** | Defines the [`readinessProbe`](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) | `{}` |
@@ -40,7 +48,7 @@ This chart is a template for common Kubernetes resource manifests, which should 
 |**affinity** | Set [`affinity`](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#node-affinity-beta-feature) to control how pods are scheduled | `{}` |
 |**defaultAffinityRules.enabled** | If `true` prevents that the `Pod` defined in `replicaCount` are not scheduled on the same node | `true` |
 |**annotations** | Sets [`annotations`](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) for the `Pod` | `{}` |
-|**labels** | Sets [`labels`](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/) for the `Pod` | `{}` |
+|**command** | Sets [`command`](https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#define-a-command-and-arguments-when-you-create-a-pod) for the `Pod`. | `[]` |
 
 ## Contributions
 If you contribute new featuers or fix a bug, please update the `.version` in the `Chart.yaml` according to [SemVer](https://semver.org/) and update the documentation.

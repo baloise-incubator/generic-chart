@@ -24,3 +24,14 @@ release: {{ .Release.Name }}
 version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 {{- end -}}
+
+{{/*
+Create the name of the service account to use
+*/}}
+{{- define "generic-chart.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create -}}
+{{ default (include "generic-chart.name" .) .Values.serviceAccount.name }}
+{{- else -}}
+{{ default "default" .Values.serviceAccount.name }}
+{{- end -}}
+{{- end -}}

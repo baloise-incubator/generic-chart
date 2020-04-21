@@ -20,10 +20,8 @@ spec:
       labels:
         app: {{ include "generic-chart.name" . }}
         release: {{ .Release.Name }}
-{{- if gt (len .Values.labels ) 0 }}
-        {{- toYaml .Values.labels | nindent 8 }}
-{{- end }}
     spec:
+      serviceAccountName: {{ template "generic-chart.serviceAccountName" . }}
     {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
@@ -32,14 +30,22 @@ spec:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}
+        {{- if .Values.command }}
+          command:
+            {{- toYaml .Values.command | nindent 12 }}
+        {{- end }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
-            - name: http
-              containerPort: {{ .Values.ports.http.containerPort }}
-              protocol: TCP
+        {{- if .Values.network }}
+        {{- range $key, $val := .Values.network }}
+            - name: {{ $key }}             
+              containerPort: {{ default $val.servicePort $val.containerPort }}
+              protocol: {{ default "TCP" $val.protocol }} 
+        {{- end }}
+        {{- end }}
 {{- if gt (len .Values.livenessProbe) 0 }}
           livenessProbe:
             {{- toYaml .Values.livenessProbe | nindent 12 }}
@@ -60,10 +66,10 @@ spec:
           volumeMounts:
 {{- if .Values.persistence.volumeMountPath }}
             - mountPath: {{ .Values.persistence.volumeMountPath }}
-              name: {{ include "generic-chart.name" . }}
+              name: {{ default (include "generic-chart.name" .) .Values.persistence.name }}
 {{- end }}
 {{- if .Values.volumeMounts -}}
-            {{- toYaml .Values.volumeMounts | nindent 12 }}
+          {{- toYaml .Values.volumeMounts | nindent 12 }}
 {{- end }}
 {{- end }}
           resources:
@@ -72,12 +78,12 @@ spec:
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-{{- if or .Values.volumes .Values.persistence.volumeMountPath }}
+{{- if or .Values.volumes .Values.persistence.enabled }}
       volumes:
-  {{- if .Values.persistence.volumeMountPath }}
-        - name: {{ include "generic-chart.name" . }}
+  {{- if .Values.persistence.enabled }}
+        - name: {{ default (include "generic-chart.name" .) .Values.persistence.name }}
           persistentVolumeClaim:
-            claimName: {{ include "generic-chart.name" . }}
+            claimName: {{ default (include "generic-chart.name" .) .Values.persistence.name }}
   {{- end }}
   {{- if .Values.volumes -}}
     {{- toYaml .Values.volumes | nindent 8 }}

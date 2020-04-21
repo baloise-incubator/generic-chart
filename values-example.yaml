@@ -8,21 +8,44 @@ imagePullSecrets: []
 nameOverride: ""
 podSecurityContext: {}
 securityContext: {}
+serviceAccount:
+  create: true
+  name:
+  automountServiceAccountToken: true
+network:
+  api:
+    servicePort: 8080
+    ingress:  {}
+  mgmt:
+    servicePort: 9090
+    ingress:
+      host: app.example.tld
+      annotations:
+        haproxy.router.openshift.io/timeout: 5m
+ingress:
+  zone: ch
 service:
   type: ClusterIP
-  port: 8080
-ingress:
-  enabled: true
-  path: /
-  annotations:
-    haproxy.router.openshift.io/timeout: 5m
 env:
   - name: DEMO_VARIABLE
     value: "Demo Variable"
 envFrom: []
-persistence: {}
-volumes: {}
-volumeMounts: {}
+persistence:
+  name: data
+  storageClass: custom-storage-class
+  enabled: true
+  accessModes: ReadWriteMany
+  size: 100Mi
+  volumeMountPath: /app/data
+volumes:
+  - name: config-volume
+    configMap:
+      name: special-config
+volumeMounts:
+  - mountPath: /usr/local/sometool
+    name: special-config
+  - mountPath: /var/data
+    name: data
 readinessProbe:
   httpGet:
     path: /
@@ -42,4 +65,6 @@ tolerations: []
 affinity: {}
 defaultAffinityRules: {}
 annotations: {}
-labels: {}
+command:
+  - /app
+  - --debug

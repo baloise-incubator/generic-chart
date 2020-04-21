@@ -1,25 +1,36 @@
-{{ if and .Values.ingress.enabled (eq "Route" .Values.ingress.controller) }}
+{{ if and (.Values.network) (eq "Route" .Values.ingress.controller) }}
+{{- range $key, $val := .Values.network }}
+{{- if not (kindIs "invalid" $val.ingress) }}
+{{- if and (not $val.ingress.host) (not $.Values.ingress.zone) }}
+{{- fail "either .network.{}.ingress.host or .ingress.zone must be set" }}
+{{- end -}}
+---
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
   labels:
-{{ include "generic-chart.labels" . | indent 4 }}
-  name: {{ include "generic-chart.name" . }}
-{{- if .Values.ingress.annotations}}
+{{ include "generic-chart.labels" $ | indent 4 }}
+  name: {{ printf "%s-%s" (include "generic-chart.name" $ ) $key }}
+{{- if $val.ingress.annotations }}
   annotations:
-    {{- toYaml .Values.ingress.annotations | nindent 4 }}
+    {{- toYaml $val.ingress.annotations | nindent 4 }}
 {{- end }}
 spec:
-  host: {{ .Values.ingress.host }}
-  path: {{ .Values.ingress.path }}
+  host: {{ $val.ingress.host }}
+  path: {{ default "/" $val.ingress.path }}
   port:
-    targetPort: http
+    targetPort: {{ $key }}    
   tls:
-    insecureEdgeTerminationPolicy: Redirect
-    termination: edge
+    insecureEdgeTerminationPolicy: {{ default "Redirect" $val.ingress.insecureEdgeTerminationPolicy }}
+    termination: {{ default "edge" $val.ingress.termination }}
   to:
     kind: Service
-    name: {{ include "generic-chart.name" . }}
+    name: {{ include "generic-chart.name" $ }}
     weight: 100
   wildcardPolicy: None
+status:
+  ingress:
+    - routerName: router
+{{ end }}
+{{- end }}
 {{- end }}

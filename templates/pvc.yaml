@@ -4,6 +4,10 @@ kind: PersistentVolumeClaim
 metadata:
   labels:
 {{ include "generic-chart.labels" . | indent 4 }}
+{{- if gt (len .Values.persistence.annotations) 0 }}
+  annotations:
+{{- toYaml .Values.persistence.annotations | nindent 4 }}
+{{- end }}
   name: {{ default ( include "generic-chart.name" . ) .Values.persistence.name }}
 spec:
   accessModes:
@@ -11,7 +15,5 @@ spec:
   resources:
     requests:
       storage: {{ .Values.persistence.size }}
-{{- if .Values.persistence.storageClass }}
   storageClassName: {{ .Values.persistence.storageClass }}
-{{ end -}}
 {{ end -}}
