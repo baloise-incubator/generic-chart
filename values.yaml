@@ -24,7 +24,7 @@ ingress:
 env: []
 envFrom: []
 persistence:
-  enabled: true
+  enabled: false
   accessModes: ReadWriteOnce
   storageClass: trident-nfs-snapshot
   annotations: {}
