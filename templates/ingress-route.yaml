@@ -28,9 +28,6 @@ spec:
     name: {{ include "generic-chart.name" $ }}
     weight: 100
   wildcardPolicy: None
-status:
-  ingress:
-    - routerName: router
 {{ end }}
 {{- end }}
 {{- end }}
