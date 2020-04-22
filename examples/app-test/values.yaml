@@ -1,0 +1,26 @@
+app:
+  replicaCount: 2
+  revisionHistoryLimit: 1
+  image:
+    repository: quay.balgroupit.com/example/nginx-sample
+    tag: latest
+    pullPolicy: IfNotPresent
+  network:
+    http:
+      servicePort: 8080
+      ingress:  {}
+  ingress:
+    zone: ch
+  readinessProbe:
+    httpGet:
+      path: /
+      port: 8080
+    initialDelaySeconds: 5
+    timeoutSeconds: 1
+  resources:
+    requests:
+      cpu: 10m
+      memory: 16Mi
+    limits:
+      cpu: 200m
+      memory: 32Mi
