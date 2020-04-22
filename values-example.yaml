@@ -64,7 +64,10 @@ nodeSelector: {}
 tolerations: []
 affinity: {}
 defaultAffinityRules: {}
-annotations: {}
+annotations:
+  sidecar.istio.io/inject: "true"
+labels:
+  maistra.io/expose-route: 'true'
 command:
   - /app
   - --debug
