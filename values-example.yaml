@@ -26,6 +26,9 @@ ingress:
   zone: ch
 service:
   type: ClusterIP
+deployment:
+  strategy:
+    type: Recreate
 env:
   - name: DEMO_VARIABLE
     value: "Demo Variable"

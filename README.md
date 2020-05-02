@@ -28,6 +28,7 @@ This chart is a template for common Kubernetes resource manifests, which should 
 | **service.annotations** | Sets [`annotations`](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) for the `Service` | `{}` |
 | **ingress.controller** | Sets the type of the ingress controller (e.g. Route, Ingress) | `Route` |
 | **env** | List of environment variables for the `Deployment` | `[]` |
+| **deployment.strategy** | Specifies the [`strategy`](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy) used to replace old Pods by new ones | `type: RollingUpdate` |
 | **envFrom** | Set environment variables from a `ConfigMap` or `Secret`. See [`envFrom`](https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-configmap/#configure-all-key-value-pairs-in-a-configmap-as-container-environment-variables) | `nil` |
 | **persistence.enabled** | If `true` a [`PVC`](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) is created | `false` |
 | **persistence.name** | The name of the PVC | `generic-chart.name` |

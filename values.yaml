@@ -21,6 +21,9 @@ service:
   annotations: {}
 ingress:
   controller: Route
+deployment:
+  strategy:
+    type: RollingUpdate
 env: []
 envFrom: []
 persistence:
