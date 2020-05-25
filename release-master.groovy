@@ -1,4 +1,4 @@
-@Library('baloise-container-shared-jenkins-library') _
+@Library('jenkins-shared-library@release') _
 
 pipeline {
     agent {
