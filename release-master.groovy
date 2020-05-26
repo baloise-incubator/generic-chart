@@ -22,7 +22,7 @@ pipeline {
         }
         stage("Helm Push") {
             steps {
-               helmPush tenant: 'shared', organisation: "openshift"
+               helmPush tenant: 'shared'
             }
         }
     }
