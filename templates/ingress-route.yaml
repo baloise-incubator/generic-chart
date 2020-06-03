@@ -4,6 +4,9 @@
 {{- if and (not $val.ingress.host) (not $.Values.ingress.zone) }}
 {{- fail "either .network.{}.ingress.host or .ingress.zone must be set" }}
 {{- end -}}
+{{- if and (not $val.ingress.host) (gt (len $.Values.network) 1) }}
+{{- fail ".ingress.zone only supported for single .network.{}.ingress" }}
+{{- end }}
 ---
 apiVersion: route.openshift.io/v1
 kind: Route
