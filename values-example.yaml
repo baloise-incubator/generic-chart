@@ -15,15 +15,14 @@ serviceAccount:
 network:
   api:
     servicePort: 8080
-    ingress:  {}
+    ingress:
+      host: api.example.tld
   mgmt:
     servicePort: 9090
     ingress:
       host: app.example.tld
       annotations:
         haproxy.router.openshift.io/timeout: 5m
-ingress:
-  zone: ch
 service:
   type: ClusterIP
 deployment:

@@ -22,6 +22,9 @@ spec:
       labels:
         app: {{ include "generic-chart.name" . }}
         release: {{ .Release.Name }}
+{{- if gt (len .Values.labels ) 0 }}
+        {{- toYaml .Values.labels | nindent 8 }}
+{{- end }}
     spec:
       serviceAccountName: {{ template "generic-chart.serviceAccountName" . }}
     {{- with .Values.imagePullSecrets }}
