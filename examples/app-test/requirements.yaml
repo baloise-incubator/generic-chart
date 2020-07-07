@@ -1,0 +1,5 @@
+dependencies:
+  - name:  generic-chart
+    version: 1.1.1
+    repository: https://registry.baloise.dev/chartrepo/library
+    alias: app
