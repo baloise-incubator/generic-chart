@@ -1,5 +1,5 @@
 # 2.0.0 (2020-07-22)
-## Breaking Change
+## Breaking Changes
 - Migrate to Helm 3
 
 ## Migration from 1.0.x to 2.0.0 / Upgrade to Helm 3
