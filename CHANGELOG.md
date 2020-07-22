@@ -1,16 +1,60 @@
 # 2.0.0 (2020-07-22)
-### Breaking Change
+## Breaking Change
 - Migrate to Helm 3
 
+## Migration from 1.0.x to 2.0.0 / Upgrade to Helm 3
+From 1.0.2 to 2.0.0 the generic-chart switch to Helm 3. This requires no changes to the `values.yaml` file but to the `Chart.yaml` and `requirements.yaml`. The content of the `requirements.yaml` now goes to the `Chart.yaml`. **The `requirements.yaml` file can be deleted afterwards**. Using Helm 3 requires to set two additional fields in the `Chart.yaml`. The `apiVersion` needs to be set to `v2` and the `version` fields must be set to a value (e.g. `1.0.0`) but it has no sematic meaning while using in config repositories.
+Example of a new Chart.yaml using Helm 3 and generic-chart 2.0.0:
+```yaml
+apiVersion: v2
+name: demo-test
+version: 1.0.0
+dependencies:
+  - name:  generic-chart
+    version: 2.0.0
+    repository: https://charts.shapp.os1.balgroupit.com/shared/release/
+    alias: demo
+```
+
 # 1.0.2 (2020-06-03)
-### Fixes
+## Fixes
 - Fail if using .ingress.zone with multiple routes
 - .ingress.zone is now deprecated 
 
 # 1.0.1 (2020-05-27)
-### Fixes
+## Fixes
 - fixed generated hostname
 
 # 1.0.0 (2020-05-26)
-### Features
+## Features
 - Initial stable release of generic-chart
+
+## Migration from 0.4.0/0.12.0 to 1.x.x
+From 0.4.0 to 1.0.x the concept of how a `Route` is created changed. The pre-release version, the `Route` configuration looked like this:
+```yaml
+generic:
+[...]
+  route:
+    enabled: true
+    host: demo-prod.shapp.os1.balgroupit.com
+```
+From 0.12.0 versions to 1.0.x the concept of how a `Route` is created changed. The pre-release version, the `Route` configuration looked like this:
+```yaml
+generic:
+[...]
+  ingress:
+    enabled: true
+    host: demo-prod.shapp.os1.balgroupit.com
+```
+
+With the introduction of support for multiple `Routes` and renaming `route` to `ingress` the equivalent in the new configuration looks like this:
+```yaml
+generic:
+  network:
+    http:
+      ingress:
+        host: demo-test.shapp-test.os1.balgroupit.com
+
+``` 
+The `network` section now configures the `Service` and `Route` configuration. The keyword `http` can be freely choosen (e.g. `metrics` or `web`) and then corresponds to the `port` name and is part of the name in the `Route` object.
+
