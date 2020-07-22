@@ -3,7 +3,7 @@
 This chart is a template for common Kubernetes resource manifests, which should cover most use cases. Please read through the list of possible configuration parameters. If you miss a specific feature, you can easily add it via a pull request. If you don't think you can do that, just create a JIRA issue in the Container Platform Team JIRA project (Key: COP)
 
 ## Change Log
-In the [CHANGELOG.md](./CHANGELOG.md) can the changes since `1.0.0` be found with the corresponding **migration guides**.
+In [CHANGELOG.md](./CHANGELOG.md) are all changes since version `1.0.0` tracked with the corresponding **migration guides**.
 
 ## Examples
 You can find an example setup using the generic-chart in the [examples directory](./examples/). The [values-example.yaml](./values-example.yaml) contains some extended configuration examples.
