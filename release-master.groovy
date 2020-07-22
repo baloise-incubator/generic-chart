@@ -22,6 +22,7 @@ pipeline {
         }
         stage("Helm Push") {
             steps {
+               helmLint()
                helmPush tenant: 'shared'
             }
         }
