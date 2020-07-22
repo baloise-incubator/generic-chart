@@ -2,6 +2,9 @@
 
 This chart is a template for common Kubernetes resource manifests, which should cover most use cases. Please read through the list of possible configuration parameters. If you miss a specific feature, you can easily add it via a pull request. If you don't think you can do that, just create a JIRA issue in the Container Platform Team JIRA project (Key: COP)
 
+## Examples
+You can find an example setup using the generic-chart in the [examples directory](./examples/). The [values-example.yaml](./values-example.yaml) contains some extended configuration examples.
+
 ## Configuration
 
 | Parameter | Description | Default |
@@ -50,6 +53,51 @@ This chart is a template for common Kubernetes resource manifests, which should 
 |**defaultAffinityRules.enabled** | If `true` prevents that the `Pod` defined in `replicaCount` are not scheduled on the same node | `true` |
 |**annotations** | Sets [`annotations`](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) for the `Pod` | `{}` |
 |**command** | Sets [`command`](https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#define-a-command-and-arguments-when-you-create-a-pod) for the `Pod`. | `[]` |
+
+
+## Migrations from earlier versions
+### Migration from 1.0.x to 2.0.0 / Upgrade to Helm 3
+From 1.0.2 to 2.0.0 the generic-chart switch to Helm 3. This requires no changes to the `values.yaml` file but to the `Chart.yaml` and `requirements.yaml`. The content of the `requirements.yaml` now goes to the `Chart.yaml`. **The `requirements.yaml` file can be deleted afterwards**. Using Helm 3 requires to set two additional fields in the `Chart.yaml`. The `apiVersion` needs to be set to `v2` and the `version` fields must be set to a value (e.g. `1.0.0`) but it has no sematic meaning while using in config repositories.
+Example of a new Chart.yaml using Helm 3 and generic-chart 2.0.0:
+```yaml
+apiVersion: v2
+name: demo-test
+version: 1.0.0
+dependencies:
+  - name:  generic-chart
+    version: 2.0.0
+    repository: https://charts.shapp.os1.balgroupit.com/shared/release/
+    alias: demo
+```
+
+### Migration from 0.4.0/0.12.0 to 1.x.x
+From 0.4.0 to 1.0.x the concept of how a `Route` is created changed. The pre-release version, the `Route` configuration looked like this:
+```yaml
+generic:
+[...]
+  route:
+    enabled: true
+    host: demo-prod.shapp.os1.balgroupit.com
+```
+From 0.12.0 versions to 1.0.x the concept of how a `Route` is created changed. The pre-release version, the `Route` configuration looked like this:
+```yaml
+generic:
+[...]
+  ingress:
+    enabled: true
+    host: demo-prod.shapp.os1.balgroupit.com
+```
+
+With the introduction of support for multiple `Routes` and renaming `route` to `ingress` the equivalent in the new configuration looks like this:
+```yaml
+generic:
+  network:
+    http:
+      ingress:
+        host: demo-test.shapp-test.os1.balgroupit.com
+
+``` 
+The `network` section now configures the `Service` and `Route` configuration. The keyword `http` can be freely choosen (e.g. `metrics` or `web`) and then corresponds to the `port` name and is part of the name in the `Route` object.
 
 ## Contributions
 If you contribute new featuers or fix a bug, please update the `.version` in the `Chart.yaml` according to [SemVer](https://semver.org/) and update the documentation.

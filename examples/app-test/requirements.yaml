@@ -1,5 +1,0 @@
-dependencies:
-  - name:  generic-chart
-    version: 1.0.0
-    repository: https://charts.shapp.os1.balgroupit.com/shared/release/
-    alias: app
