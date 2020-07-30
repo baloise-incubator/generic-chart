@@ -8,9 +8,8 @@ app:
   network:
     http:
       servicePort: 8080
-      ingress:  {}
-  ingress:
-    zone: ch
+      ingress:
+        host: example-app-test.chapp-test.os1.balgroupit.com
   readinessProbe:
     httpGet:
       path: /
