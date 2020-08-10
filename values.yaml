@@ -50,3 +50,4 @@ defaultAffinityRules:
   enabled: true
 annotations: {}
 command: []
+args: []

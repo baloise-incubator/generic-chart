@@ -1,3 +1,7 @@
+# 2.1.0 (2020-08-10)
+## Features
+- Expose container `args`
+
 # 2.0.0 (2020-07-22)
 ## Breaking Changes
 - Migrate to Helm 3
