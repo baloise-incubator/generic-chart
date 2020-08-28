@@ -54,3 +54,4 @@ defaultAffinityRules:
 annotations: {}
 labels: {}
 command: []
+args: []

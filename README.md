@@ -51,6 +51,7 @@ This chart is a template for common Kubernetes resource manifests, which should 
 |**annotations** | Sets [`annotations`](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) for the `Pod` | `{}` |
 |**labels** | Sets [`labels`](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/) for the `Pod` | `{}` |
 |**command** | Sets [`command`](https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#define-a-command-and-arguments-when-you-create-a-pod) for the `Pod`. | `[]` |
+|**args** | Sets [`args`](https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#define-a-command-and-arguments-when-you-create-a-pod) for the `Pod`. | `[]` |
 
 ## Contributions
 If you contribute new featuers or fix a bug, please update the `.version` in the `Chart.yaml` according to [SemVer](https://semver.org/) and update the documentation.
