@@ -73,3 +73,6 @@ labels:
 command:
   - /app
   - --debug
+args:
+  - --port=123
+  - --path=/a/b/c
