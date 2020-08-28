@@ -29,7 +29,7 @@ envFrom: []
 persistence:
   enabled: false
   accessModes: ReadWriteOnce
-  storageClass: ""
+#  storageClass: "ceph"
   annotations: {}
 #  size: 1Gi
 #  volumeMount: /var/app/data/
@@ -54,3 +54,4 @@ defaultAffinityRules:
 annotations: {}
 labels: {}
 command: []
+args: []
