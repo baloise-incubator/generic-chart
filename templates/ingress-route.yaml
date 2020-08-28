@@ -1,9 +1,10 @@
 {{ if and (.Values.network) (eq "Route" .Values.ingress.controller) }}
 {{- range $key, $val := .Values.network }}
 {{- if not (kindIs "invalid" $val.ingress) }}
-{{- if and (not $val.ingress.host) (not $.Values.ingress.zone) }}
-{{- fail "either .network.{}.ingress.host or .ingress.zone must be set" }}
-{{- end -}}
+{{- $defaultTermination :="edge" }}
+{{- if $.Values.tlsSidecar.enabled }}
+{{- $defaultTermination = "reencrypt" }}
+{{- end }}
 ---
 apiVersion: route.openshift.io/v1
 kind: Route
@@ -22,7 +23,7 @@ spec:
     targetPort: {{ $key }}    
   tls:
     insecureEdgeTerminationPolicy: {{ default "Redirect" $val.ingress.insecureEdgeTerminationPolicy }}
-    termination: {{ default "edge" $val.ingress.termination }}
+    termination: {{ default $defaultTermination $val.ingress.termination }}
   to:
     kind: Service
     name: {{ include "generic-chart.name" $ }}

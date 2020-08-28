@@ -48,7 +48,7 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
-        {{- if .Values.network }}
+        {{- if and (.Values.network) (not .Values.tlsSidecar.enabled) }}
         {{- range $key, $val := .Values.network }}
             - name: {{ $key }}             
               containerPort: {{ default $val.servicePort $val.containerPort }}
@@ -83,20 +83,42 @@ spec:
 {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+{{- if .Values.tlsSidecar.enabled }}
+        - image: {{ .Values.tlsSidecar.image.repository}}:{{ .Values.tlsSidecar.image.tag }}
+          imagePullPolicy: {{ .Values.tlsSidecar.image.pullPolicy }}
+          name: tls-sidecar
+          resources:
+            {{- toYaml .Values.tlsSidecar.resources | nindent 12 }}
+          ports:
+            - containerPort: {{ .Values.tlsSidecar.httpsPort }}
+              protocol: TCP
+              name: https
+          volumeMounts:
+            - mountPath: /etc/ssl/private
+              name: certificates
+            - mountPath: /etc/envoy/
+              name: envoy-config
+{{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-{{- if or .Values.volumes .Values.persistence.enabled }}
       volumes:
-  {{- if .Values.persistence.enabled }}
+{{- if .Values.persistence.enabled }}
         - name: {{ default (include "generic-chart.name" .) .Values.persistence.name }}
           persistentVolumeClaim:
             claimName: {{ default (include "generic-chart.name" .) .Values.persistence.name }}
-  {{- end }}
-  {{- if .Values.volumes -}}
+{{- end }}
+{{- if .Values.tlsSidecar.enabled }}
+        - name: certificates
+          secret:
+            secretName: {{ include "generic-chart.name" . }}-tls
+        - name: envoy-config
+          configMap:
+            name: {{ include "generic-chart.name" . }}-tls-sidecar
+{{- end }}
+{{- if .Values.volumes -}}
     {{- toYaml .Values.volumes | nindent 8 }}
-  {{- end }}
 {{- end }}
 {{- if or .Values.affinity .Values.defaultAffinityRules.enabled }}
       affinity:

@@ -5,9 +5,12 @@ metadata:
   name: {{ include "generic-chart.name" . }}
   labels:
 {{ include "generic-chart.labels" . | indent 4 }}
-{{- if gt (len .Values.service.annotations) 0 }}
   annotations:
+{{- if .Values.service.annotations }}
 {{- toYaml .Values.service.annotations | nindent 4 }}
+{{- end -}}
+{{- if .Values.tlsSidecar.enabled }}
+    service.alpha.openshift.io/serving-cert-secret-name: {{ include "generic-chart.name" . }}-tls
 {{- end }}
 spec:
   type: {{ .Values.service.type }}

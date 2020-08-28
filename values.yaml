@@ -44,6 +44,21 @@ livenessProbe: {}
 #    path: /
 #    port: http
 resources: {}
+tlsSidecar:
+  enabled: false
+  image:
+    repository: docker.io/envoyproxy/envoy
+    tag: v1.14.4
+    pullPolicy: IfNotPresent
+  upstreamPort: 8080
+  httpsPort: 8443
+  resources:
+    requests:
+      memory: 32Mi
+      cpu: 20m
+    limits:
+      memory: 32Mi
+      cpu: 100m
 podSecurityContext: {}
 securityContext: {}
 nodeSelector: {}

@@ -1,0 +1,55 @@
+{{- if .Values.tlsSidecar.enabled -}}
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: {{ include "generic-chart.name" . }}-tls-sidecar
+data:
+  envoy.yaml: |
+    static_resources:
+      listeners:
+      - name: listener_https
+        address:
+          socket_address: { address: 0.0.0.0, port_value: {{ .Values.tlsSidecar.httpsPort }} }
+        filter_chains:
+        - filters:
+          - name: envoy.http_connection_manager
+            config:
+              codec_type: auto
+              stat_prefix: ingress_http
+              route_config:
+                name: local_route
+                virtual_hosts:
+                - name: backend
+                  domains:
+                  - "*"
+                  routes:
+                  - match:
+                      prefix: "/"
+                    route:
+                      cluster: service
+              http_filters:
+              - name: envoy.router
+                config: {}
+          tls_context:
+            common_tls_context:
+              tls_certificates:
+                - certificate_chain:
+                    filename: "/etc/ssl/private/tls.crt"
+                  private_key:
+                    filename: "/etc/ssl/private/tls.key"
+      clusters:
+      - name: service
+        connect_timeout: 0.25s
+        type: strict_dns
+        lb_policy: round_robin
+        hosts:
+        - socket_address:
+            address: localhost
+            port_value: {{ .Values.tlsSidecar.upstreamPort }}
+    admin:
+      access_log_path: /tmp/admin_access.log
+      address:
+        socket_address:
+          address: 0.0.0.0
+          port_value: 8001
+{{ end -}}

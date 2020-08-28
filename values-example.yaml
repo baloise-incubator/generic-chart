@@ -25,6 +25,8 @@ network:
         haproxy.router.openshift.io/timeout: 5m
 service:
   type: ClusterIP
+  annotations:
+    test: abc
 deployment:
   strategy:
     type: Recreate
@@ -62,6 +64,21 @@ resources:
   limits:
     cpu: 100m
     memory: 32Mi
+tlsSidecar:
+  enabled: true
+  image:
+    repository: docker.io/envoyproxy/envoy
+    tag: v1.14.4
+    pullPolicy: IfNotPresent
+  upstreamPort: 8080
+  httpsPort: 8443
+  resources:
+    requests:
+      memory: 32Mi
+      cpu: 20m
+    limits:
+      memory: 32Mi
+      cpu: 100m
 nodeSelector: {}
 tolerations: []
 affinity: {}
