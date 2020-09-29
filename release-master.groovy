@@ -1,6 +1,7 @@
-@Library('jenkins-shared-library@master') _
+@Library('jenkins-shared-library@release') _
 
 pipeline {
+
     agent {
         label 'podman'
     }
@@ -14,16 +15,18 @@ pipeline {
     }
 
     stages {
-        stage("Checkout") {
+        stage("Helm Lint") {
             steps {
-                gitcheckout url: "https://bitbucket.balgroupit.com/scm/container/generic-chart.git",
-                        branch: "master"
+                helmLint()
             }
         }
+
         stage("Helm Push") {
+            when {
+                branch 'master'
+            }
             steps {
-               helmLint()
-               helmPush tenant: 'shared'
+                helmPush tenant: 'shared'
             }
         }
     }
