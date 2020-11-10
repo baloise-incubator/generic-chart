@@ -30,6 +30,7 @@ You can find an example setup using the generic-chart in the [examples directory
 | **network.{}.ingress.host** | Sets the hostname for the `Ingress` or `Route`. If `nil` see `ingress.zone` | `nil` |
 | **network.{}.ingress.annotations** | Sets [`annotations`](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) for the `Ingress` or `Route` instance | `{}` |
 | **network.{}.ingress.path** | Sets the path for the `Ingress` or `Route` instance | `/` |
+| **network.{}.ingress.termination** | [TLS termination](https://docs.openshift.com/container-platform/3.11/architecture/networking/routes.html#route-types) for the `Ingress` or `Route` instance. Possible values are `edge`, `passthrough` or `reencrypt` | `edge` |
 | **service.type** | `Service` type (`ClusterIP`, `NodePort`, `ExternalName`) | `ClusterIP` |
 | **service.annotations** | Sets [`annotations`](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) for the `Service` | `{}` |
 | **ingress.controller** | Sets the type of the ingress controller (e.g. Route, Ingress) | `Route` |
