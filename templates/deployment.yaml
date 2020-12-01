@@ -28,7 +28,7 @@ spec:
     {{- end }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
-    {{ if .Values.initContainers }}
+    {{- if .Values.initContainers }}
       initContainers:
         {{ toYaml .Values.initContainers | nindent 8 }}
     {{- end }}

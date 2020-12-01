@@ -1,3 +1,7 @@
+# 2.2.0 (2020-12-01)
+## Features
+- Add initContainers to the deployment template. Now initContainers can be defined in `values.yaml` (in plain YAML).
+
 # 2.1.0 (2020-08-10)
 ## Features
 - Expose container `args`

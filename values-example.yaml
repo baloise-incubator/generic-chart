@@ -8,6 +8,16 @@ imagePullSecrets: []
 nameOverride: ""
 podSecurityContext: {}
 securityContext: {}
+initContainers:
+  - name: "demo-init-container"
+    image: quay.balgroupit.com/baloise-base-images/busybox:1.31.1
+    command: ["sh","-c", "echo test"]
+    volumeMounts:
+      - name: special-config
+        mountPath: /tmp
+    env:
+      - name: INIT_DEMO_VARIABLE
+        value: "Init Demo Variable"
 serviceAccount:
   create: true
   name:
