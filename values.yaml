@@ -51,3 +51,4 @@ defaultAffinityRules:
 annotations: {}
 command: []
 args: []
+initContainers: []
