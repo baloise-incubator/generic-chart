@@ -1,5 +1,5 @@
+{{ if .Values.metrics }}
 {{ if .Values.network }}
-{{ if .Values.network.metrics }}
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
@@ -8,14 +8,12 @@ metadata:
 {{ include "generic-chart.labels" . | indent 4 }}
 spec:
   endpoints:
-    - interval: {{ default "30s" .Values.metricsInterval }}
-      port: {{ .Values.network.metrics.servicePort }}
-      path: {{ default "/metrics" .Values.metricsPath }}
-      scheme: {{ default "http" .Values.metricsScheme }}
-  namespaceSelector:
-    any: true
+    - interval: {{ default "30s" .Values.metrics.interval }}
+      port: {{ default .Values.network.http.servicePort .Values.metrics.port }}
+      path: {{ default "/metrics" .Values.metrics.path }}
+      scheme: {{ default "http" .Values.metrics.scheme }}
   selector:
     matchLabels:
-      app.kubernetes.io/name: {{ include "generic-chart.name" . }}
+      app: {{ include "generic-chart.name" . }}
 {{- end }}
 {{- end }}
