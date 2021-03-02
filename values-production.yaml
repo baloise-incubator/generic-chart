@@ -4,6 +4,8 @@ image:
   repository: quay.balgroupit.com/example/nginx-sample
   tag: latest
   pullPolicy: IfNotPresent
+serviceMonitor:
+  enabled: true
 network:
   http:
     servicePort: 8080

@@ -1,3 +1,14 @@
+# 2.3.0 (2021-03-02)
+## Features
+- Add serviceMonitor to generic chart. Now a default ServiceMonitor can be configured by applying:
+
+```
+serviceMonitor:
+  enabled: true
+```
+Other configuration parameters can be seen in values.yaml or in the README.
+
+
 # 2.2.0 (2020-12-01)
 ## Features
 - Add initContainers to the deployment template. Now initContainers can be defined in `values.yaml` (in plain YAML).

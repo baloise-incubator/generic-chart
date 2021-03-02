@@ -11,6 +11,10 @@ serviceAccount:
   name:
   automountServiceAccountToken: false
   annotations: {}
+serviceMonitor:
+  port: 'http'
+  path: '/metrics'
+  interval: '60s'
 network:
   http:
     servicePort: 8080

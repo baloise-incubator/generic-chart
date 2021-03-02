@@ -59,6 +59,7 @@ You can find an example setup using the generic-chart in the [examples directory
 |**command** | Sets [`command`](https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#define-a-command-and-arguments-when-you-create-a-pod) for the `Pod`. | `[]` |
 |**args** | Sets [`args`](https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#define-a-command-and-arguments-when-you-create-a-pod) for the `Pod`. | `[]` |
 |**initContainers** | Sets [`initContainers`](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/) for the `Pod`. | `[]` |
+|**serviceMonitor**| Sets [`Service Monitor`](https://docs.openshift.com/container-platform/latest/rest_api/monitoring_apis/servicemonitor-monitoring-coreos-com-v1.html) for the `Service`. parameters: `interval`, `port`, `path`, `scheme`.| `[]` |
 
 ## Contributions
 If you contribute new featuers or fix a bug, please update the `.version` in the `Chart.yaml` according to [SemVer](https://semver.org/) and update the documentation.

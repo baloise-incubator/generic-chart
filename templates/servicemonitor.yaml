@@ -1,4 +1,4 @@
-{{ if .Values.metrics }}
+{{ if .Values.serviceMonitor }}
 {{ if .Values.network }}
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
@@ -8,10 +8,10 @@ metadata:
 {{ include "generic-chart.labels" . | indent 4 }}
 spec:
   endpoints:
-    - interval: {{ default "30s" .Values.metrics.interval }}
-      port: {{ default .Values.network.http.servicePort .Values.metrics.port }}
-      path: {{ default "/metrics" .Values.metrics.path }}
-      scheme: {{ default "http" .Values.metrics.scheme }}
+    - interval: {{ default "30s" .Values.serviceMonitor.interval }}
+      port: {{ default "http" .Values.serviceMonitor.port | quote }}
+      path: {{ default "/metrics" .Values.serviceMonitor.path }}
+      scheme: {{ default "http" .Values.serviceMonitor.scheme }}
   selector:
     matchLabels:
       app: {{ include "generic-chart.name" . }}
