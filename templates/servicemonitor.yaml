@@ -1,0 +1,20 @@
+{{- range $key,$val := .Values.network }}
+{{ if not (kindIs "invalid" $val.serviceMonitor) }}
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ $key }}
+  labels:
+{{ include "generic-chart.labels" $ | indent 4 }}
+spec:
+  endpoints:
+    - interval: {{ default "30s" $val.serviceMonitor.interval }}
+      port: {{ $key }}
+      path: {{ default "/metrics" $val.serviceMonitor.path }}
+      scheme: {{ default "http" $val.serviceMonitor.scheme }}
+  selector:
+    matchLabels:
+      app: {{ include "generic-chart.name" $ }}
+{{- end }}
+{{- end }}

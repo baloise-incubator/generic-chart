@@ -23,7 +23,7 @@ You can find an example setup using the generic-chart in the [examples directory
 | **serviceAccount.name** | Name of the `ServiceAccount`. If not set and create is true, a name is generated using the name template | `nil` |
 | **serviceAccount.automountServiceAccountToken** | If `true` the `Secret` with the `Token` and `Certificates`  of the `ServiceAccount` is mounted. Only required when access to the master API is necessary | `false` |
 | **serviceAccount.annotations** | Sets [`annotations`](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) for the `ServiceAccount` | `{}` |
-| **network** | Map of ports which should be exposed. Adds `ports` section to the Pod template, adds `ports` section to Service and can create `Ingress` or `Route` for the ports. | `network.http.servicePort: 8080` |
+| **network** | Map of ports which should be exposed. Adds `ports` section to the Pod template, adds `ports` section to Service and can create `Ingress` or `Route` and `ServiceMonitor` for the ports. | `network.http.servicePort: 8080` |
 | **network.{}.servicePort** | Port number of the `Service` (e.g. 8080, 8443). If `nil` no port on the `Service` is exposed | `nil` |
 | **network.{}.containerPort** | The port which is exposed on the `Pod`. If `nil` corresponds to the `network.{}.servicePort` | `nil` |
 | **network.{}.ingress** | If not `nil` creates an `Ingress` or `Route` for the `Service` and its `servicePort`. If set to `{}` see `ingress.zone` | `nil` |
@@ -31,6 +31,10 @@ You can find an example setup using the generic-chart in the [examples directory
 | **network.{}.ingress.annotations** | Sets [`annotations`](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) for the `Ingress` or `Route` instance | `{}` |
 | **network.{}.ingress.path** | Sets the path for the `Ingress` or `Route` instance | `/` |
 | **network.{}.ingress.termination** | [TLS termination](https://docs.openshift.com/container-platform/3.11/architecture/networking/routes.html#route-types) for the `Ingress` or `Route` instance. Possible values are `edge`, `passthrough` or `reencrypt` | `edge` |
+| **network.{}.serviceMonitor**| If set to `{}` creates a `ServiceMonitor` for the `Service` and its `servicePort` with default values for `interval`,`path` and `scheme` | `nil` |
+| **network.{}.serviceMonitor.interval**| Interval at which metrics should be scraped | `30s` |
+| **network.{}.serviceMonitor.path**| HTTP path to scrape for metrics. | `/metrics` |
+| **network.{}.serviceMonitor.scheme**| HTTP scheme to scrape metrics | `http` |
 | **service.type** | `Service` type (`ClusterIP`, `NodePort`, `ExternalName`) | `ClusterIP` |
 | **service.annotations** | Sets [`annotations`](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) for the `Service` | `{}` |
 | **ingress.controller** | Sets the type of the ingress controller (e.g. Route, Ingress) | `Route` |

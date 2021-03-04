@@ -14,6 +14,7 @@ serviceAccount:
 network:
   http:
     servicePort: 8080
+#    serviceMonitor: {}
 #    ingress:
 #      host: application-test.chapp-test.os1.balgroupit.com
 service:

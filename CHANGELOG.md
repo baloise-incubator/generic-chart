@@ -1,3 +1,7 @@
+# 2.3.0 (2021-03-04)
+## Features
+- Add the option to create a serviceMonitor for each exposed port.
+
 # 2.2.0 (2020-12-01)
 ## Features
 - Add initContainers to the deployment template. Now initContainers can be defined in `values.yaml` (in plain YAML).
