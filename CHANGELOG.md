@@ -1,13 +1,6 @@
-# 2.3.0 (2021-03-02)
+# 2.3.0 (2021-03-04)
 ## Features
-- Add serviceMonitor to generic chart. Now a default ServiceMonitor can be configured by applying:
-
-```
-serviceMonitor:
-  enabled: true
-```
-Other configuration parameters can be seen in values.yaml or in the README.
-
+- Add the option to create a serviceMonitor for each exposed port.
 
 # 2.2.0 (2020-12-01)
 ## Features
