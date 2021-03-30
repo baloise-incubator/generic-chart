@@ -1,3 +1,7 @@
+# 2.3.1 (2021-03-26)
+## Fixes
+- Include chart name in ServiceMonitor name to prevent resource name collisions.
+
 # 2.3.0 (2021-03-04)
 ## Features
 - Add the option to create a serviceMonitor for each exposed port.
