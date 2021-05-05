@@ -56,3 +56,4 @@ labels: {}
 command: []
 args: []
 initContainers: []
+additionalContainers: []
