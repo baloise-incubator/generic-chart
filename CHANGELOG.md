@@ -1,3 +1,7 @@
+# 2.3.2 (2021-05-05)
+## Features
+- Enable support for multiple containers
+
 # 2.3.1 (2021-03-26)
 ## Fixes
 - Include chart name in ServiceMonitor name to prevent resource name collisions.
