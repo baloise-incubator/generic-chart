@@ -1,22 +1,25 @@
 replicaCount: 2
-revisionHistoryLimit: 1
 image:
   repository: quay.balgroupit.com/baloise-base-images/nginx
   tag: 1.19-alpine
   pullPolicy: IfNotPresent
-imagePullSecrets: []
-nameOverride: ""
-podSecurityContext: {}
-securityContext: {}
-
 additionalContainers:
   - name: "nginx-exporter"
     image: quay.balgroupit.com/devops/nginx-prometheus-exporter:0.9.0
     args:
       - -nginx.retry-interval=10s
+    resources:
+      requests:
+        cpu: 10m
+        memory: 16Mi
+      limits:
+        cpu: 100m
+        memory: 32Mi
     volumeMounts:
       - name: special-config
         mountPath: /tmp
+      - mountPath: /var/data
+        name: data
     env:
       - name: SCRAPE_URI
         value: "http://127.0.0.1:8080/stub_status"
@@ -32,26 +35,23 @@ initContainers:
         value: "Init Demo Variable"
 serviceAccount:
   create: true
-  name:
+  name: nginx
   automountServiceAccountToken: true
 network:
   nginx-exporter:
-    servicePort: 9114
+    servicePort: 9113
     ingress:
-      host: nginx-exporter.chapp-test.os1.balgroupit.com
+      host: nginx-exporter.app.os2.balgroupit.com
   http:
     servicePort: 8080
     ingress:
-      host: http.chapp-test.os2.balgroupit.com
-service:
-  type: ClusterIP
+      host: nginx-http.app.os2.balgroupit.com
 env:
   - name: DEMO_VARIABLE
     value: "Demo Variable"
-envFrom: []
 persistence:
   name: data
-  storageClass: trident-nfs
+  storageClass: trident-nfs-snapshot
   enabled: true
   accessModes: ReadWriteMany
   size: 100Mi
@@ -77,7 +77,6 @@ readinessProbe:
     port: 8080
   initialDelaySeconds: 5
   timeoutSeconds: 1
-livenessProbe: {}
 resources:
   requests:
     cpu: 10m
@@ -85,8 +84,3 @@ resources:
   limits:
     cpu: 100m
     memory: 32Mi
-nodeSelector: {}
-tolerations: []
-affinity: {}
-defaultAffinityRules: {}
-annotations: {}
