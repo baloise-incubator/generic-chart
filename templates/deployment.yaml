@@ -33,6 +33,9 @@ spec:
         {{ toYaml .Values.initContainers | nindent 8 }}
     {{- end }}
       containers:
+    {{- if .Values.additionalContainers }}
+        {{ toYaml .Values.additionalContainers | nindent 8 }}
+    {{- end }}
         - name: {{ .Chart.Name }}
         {{- if .Values.command }}
           command:
