@@ -21,6 +21,14 @@ spec:
         app: {{ include "generic-chart.name" . }}
         release: {{ .Release.Name }}
     spec:
+      topologySpreadConstraints:
+      - maxSkew: 1
+        topologyKey: topology.kubernetes.io/{{ .Values.zone }}
+        whenUnsatisfiable: DoNotSchedule
+        labelSelector:
+          matchLabels:
+           app: {{ include "generic-chart.name" . }}
+           release: {{ .Release.Name }}
       serviceAccountName: {{ template "generic-chart.serviceAccountName" . }}
     {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
