@@ -1,3 +1,7 @@
+# 2.4.1 (2021-05-25)
+## Features
+- Add topology awareness for pods
+
 # 2.4.0 (2021-05-05)
 ## Features
 - Enable support for multiple containers
