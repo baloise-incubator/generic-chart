@@ -13,6 +13,7 @@ You can find an example setup using the generic-chart in the [examples directory
 | Parameter | Description | Default |
 |----------:|:------------|:--------|
 | **replicaCount** | Amount of `Pod` replicas | `1` |
+| **zone** | Target DC `Pod` placement. Allowed values are any,dc1 or dc2. | `any` |
 | **revisionHistoryLimit** | Amount of old `ReplicaSets` for this `Deployment` should be retained | `1` |
 | **image.repository** | URL to the container registry with organisation and repository | `nil` |
 | **image.tag** | Image tag of the provided container repository | `nil` |
