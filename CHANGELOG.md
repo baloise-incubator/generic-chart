@@ -1,3 +1,7 @@
+# 3.0.0 (2021-05-25)
+## Features
+- Add topology awareness for pods. Required for new Cluster in HCL datacenter
+
 # 2.4.0 (2021-05-05)
 ## Features
 - Enable support for multiple containers

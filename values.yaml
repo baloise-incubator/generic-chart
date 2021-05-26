@@ -1,5 +1,6 @@
 replicaCount: 1
 revisionHistoryLimit: 1
+zone: any
 image:
 #  repository: quay.balgroupit.com/example/nginx-sample
 #  tag: latest
