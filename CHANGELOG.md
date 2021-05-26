@@ -1,4 +1,4 @@
-# 2.4.1 (2021-05-25)
+# 3.0.0 (2021-05-25)
 ## Features
 - Add topology awareness for pods
 
