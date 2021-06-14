@@ -36,6 +36,7 @@ You can find an example setup using the generic-chart in the [examples directory
 | **network.{}.serviceMonitor.interval**| Interval at which metrics should be scraped | `30s` |
 | **network.{}.serviceMonitor.path**| HTTP path to scrape for metrics. | `/metrics` |
 | **network.{}.serviceMonitor.scheme**| HTTP scheme to scrape metrics | `http` |
+| **network.{}.serviceMonitor.extraConfig**| Any additional configuration available under `endpoints` of the `ServiceMonitor` | `nil` |
 | **service.type** | `Service` type (`ClusterIP`, `NodePort`, `ExternalName`) | `ClusterIP` |
 | **service.annotations** | Sets [`annotations`](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) for the `Service` | `{}` |
 | **ingress.controller** | Sets the type of the ingress controller (e.g. Route, Ingress) | `Route` |

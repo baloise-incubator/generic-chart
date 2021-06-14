@@ -1,3 +1,7 @@
+# 3.1.0 (2021-06-14)
+## Features
+- Add `network.{}.serviceMonitor.extraConfig` which allows to append any custom configuration to the endpoints section of the ServiceMonitor 
+
 # 3.0.0 (2021-05-25)
 ## Features
 - Add topology awareness for pods. Required for new Cluster in HCL datacenter
