@@ -25,15 +25,14 @@ serviceAccount:
 network:
   api:
     servicePort: 8080
-    ingress:  {}
+    ingress:
+      host: example-url.tld
   mgmt:
     servicePort: 9090
     ingress:
       host: abcz-chapp-balgroupit.com
       annotations:
         haproxy.router.openshift.io/timeout: 5m
-ingress: 
-  zone: ch
 service:
   type: ClusterIP
 env:
@@ -42,7 +41,7 @@ env:
 envFrom: []
 persistence:
   name: data
-  storageClass: custom-storage-class
+  storageClass:
   enabled: true
   accessModes: ReadWriteMany
   size: 100Mi

@@ -1,3 +1,7 @@
+# 3.2.0 (2021-07-22)
+## Breaking Change
+- Remove `persistence.storageClass` default `trident-nfs-snapshot`. This leads to using the default storage class defined in the corresponding OpenShift cluster.
+
 # 3.1.0 (2021-06-14)
 ## Features
 - Add `network.{}.serviceMonitor.extraConfig` which allows to append any custom configuration to the endpoints section of the ServiceMonitor 
