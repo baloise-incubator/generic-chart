@@ -28,7 +28,7 @@ envFrom: []
 persistence:
   enabled: false
   accessModes: ReadWriteOnce
-  storageClass: trident-nfs-snapshot
+  storageClass:
   annotations: {}
 #  size: 1Gi
 #  volumeMount: /var/app/data/
