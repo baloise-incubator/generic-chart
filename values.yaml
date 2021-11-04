@@ -7,6 +7,8 @@ image:
   pullPolicy: IfNotPresent
 imagePullSecrets: []
 nameOverride: ""
+enableServiceMesh: false
+enableIstioIngressGateway: false
 serviceAccount:
   create: true
   name:
