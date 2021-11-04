@@ -1,4 +1,4 @@
-{{- if not ( .Values.enableIstioIngressGateway ) }}
+{{- if not ( .Values.enableServiceMesh ) }}
 {{- if and ( .Values.network ) (eq "Route" .Values.ingress.controller) }}
 {{- range $key, $val := .Values.network }}
 {{- if not ( kindIs "invalid" $val.ingress ) }}

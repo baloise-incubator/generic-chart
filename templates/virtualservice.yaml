@@ -1,27 +1,21 @@
 {{- if .Values.enableServiceMesh }}
-{{- if not ( .Values.enableIstioIngressGateway ) }}
+{{- range $key, $val := .Values.network }}
+{{- if not ( $val.enableIstioIngressGateway ) }}
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
-  name: {{ include "generic-chart.name" . }}
+  name: {{ printf "%s" (include "generic-chart.name" $) }}
   labels:
-{{ include "generic-chart.labels" . | indent 4 }}
+{{ include "generic-chart.labels" $ | indent 4 }}
 spec:
-{{- if not ( .Values.network.http.ingress.host ) }}
   hosts:
-  - {{ include "generic-chart.name" . }}
-{{- end }}
-{{- if .Values.network.http.ingress.host }}
-  hosts:
-  - {{ if .Values.network.http.ingress.host }}{{ .Values.network.http.ingress.host }}{{ else }}{{ printf "%s-%s" (include "generic-chart.name" $ ) (include "generic-chart.host" $) }}{{ end }}
-  gateways:
-   - {{ include "generic-chart.name" . }}
-{{- end }}
+  - {{ printf "%s" (include "generic-chart.name" $) }}
   http:
   - route:
     - destination:
-        host: {{ include "generic-chart.name" . }}
+        host: {{ printf "%s" (include "generic-chart.name" $) }}
         port:
-          number: {{ .Values.network.http.servicePort }}
+          number: {{ $val.servicePort }}
+{{- end }}
 {{- end }}
 {{- end }}

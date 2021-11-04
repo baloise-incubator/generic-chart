@@ -8,7 +8,6 @@ image:
 imagePullSecrets: []
 nameOverride: ""
 enableServiceMesh: false
-enableIstioIngressGateway: false
 serviceAccount:
   create: true
   name:
@@ -17,6 +16,7 @@ serviceAccount:
 network:
   http:
     servicePort: 8080
+    enableIstioIngressGateway: false
 #    serviceMonitor: {}
 #    ingress:
 #      host: application-test.chapp-test.os1.balgroupit.com
