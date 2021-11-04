@@ -1,5 +1,6 @@
 {{- if .Values.enableServiceMesh }}
 {{- if .Values.enableIstioIngressGateway }}
+{{- $hostname := printf "%s-%s" (include "generic-chart.name" $) (include "generic-chart.host" $) }}
 {{- range $key, $val := .Values.network }}
 {{- if not ( kindIs "invalid" $val.ingress ) }}
 {{- if and (not $val.ingress.host) (not $.Values.ingress.clusterName) }}
@@ -11,39 +12,37 @@
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
-  name: {{ include "generic-chart.name" . }}
+  name: {{ printf "%s" (include "generic-chart.name" $) }}
   labels:
-{{ include "generic-chart.labels" . | indent 4 }}
+{{ include "generic-chart.labels" $ | indent 4 }}
 spec:
-{{- if .Values.network.http.ingress.host }}
   hosts:
-  - {{ if $val.ingress.host }}{{ $val.ingress.host }}{{ else }}{{ printf "%s-%s" (include "generic-chart.name" $ ) (include "generic-chart.host" $) }}{{ end }}
+  - {{ if $val.ingress.host }}{{ $val.ingress.host }}{{ else }}{{ $hostname }}{{ end }}
   gateways:
-   - {{ include "generic-chart.name" . }}
-{{- end }}
+   - {{ printf "%s" (include "generic-chart.name" $ ) }}
   http:
   - route:
     - destination:
-        host: {{ include "generic-chart.name" . }}
+        host: {{ printf "%s" (include "generic-chart.name" $) }}
         port:
           number: {{ $val.servicePort }}
 ---
 apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
-  name: {{ include "generic-chart.name" . }}
+  name: {{ printf "%s" (include "generic-chart.name" $ ) }}
   labels:
-{{ include "generic-chart.labels" . | indent 4 }}
+{{ include "generic-chart.labels" $ | indent 4 }}
 spec:
   selector:
     istio: ingressgateway
   servers:
   - port:
      number: 80
-     name: {{ include "generic-chart.name" . }}
+     name: {{ printf "%s" (include "generic-chart.name" $) }}
      protocol: HTTP
     hosts:
-    - {{ if $val.ingress.host }}{{ $val.ingress.host }}{{ else }}{{ printf "%s-%s" (include "generic-chart.name" $ ) (include "generic-chart.host" $) }}{{ end }}
+    - {{ if $val.ingress.host }}{{ $val.ingress.host }}{{ else }}{{ $hostname }}{{ end }}
 {{- end }}
 {{- end }}
 {{- end }}
