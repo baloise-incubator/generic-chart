@@ -1,4 +1,5 @@
 {{- if .Values.enableServiceMesh }}
+{{- if not ( .Values.enableIstioIngressGateway ) }}
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
@@ -22,4 +23,5 @@ spec:
         host: {{ include "generic-chart.name" . }}
         port:
           number: {{ .Values.network.http.servicePort }}
+{{- end }}
 {{- end }}
