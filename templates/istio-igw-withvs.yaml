@@ -37,7 +37,7 @@ spec:
   selector:
     istio: ingressgateway
   servers:
-{{- if not (eq "$val.ingress.termination" "passthrough") }}
+{{- if ne "$val.ingress.termination" "passthrough" }}
   - port:
      number: 80
      name: {{ printf "%s" (include "generic-chart.name" $) }}
@@ -63,7 +63,7 @@ metadata:
   namespace: {{ $.Values.serviceMeshName }}
 spec:
   host: {{ if $val.ingress.host }}{{ $val.ingress.host }}{{ else }}{{ $hostname }}{{ end }} 
-{{- if not (eq "$val.ingress.termination" "passthrough") }}
+{{- if ne "$val.ingress.termination" "passthrough" }}
   path: {{ default "/" $val.ingress.path }}
 {{- end }}
   port:
