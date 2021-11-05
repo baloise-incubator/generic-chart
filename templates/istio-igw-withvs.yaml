@@ -37,13 +37,13 @@ spec:
   selector:
     istio: ingressgateway
   servers:
-{{- if not ($val.ingress.termination "passthrough") }}
+{{- if not (eq "$val.ingress.termination" "passthrough") }}
   - port:
      number: 80
      name: {{ printf "%s" (include "generic-chart.name" $) }}
      protocol: HTTP
 {{- end }}
-{{- if $val.ingress.termination "passthrough" }}
+{{- if eq "$val.ingress.termination" "passthrough" }}
   - port:
      number: 443
      name: {{ printf "%s" (include "generic-chart.name" $) }}
