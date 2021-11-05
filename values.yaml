@@ -8,6 +8,7 @@ image:
 imagePullSecrets: []
 nameOverride: ""
 enableServiceMesh: false
+serviceMeshName: istio-system-ch
 serviceAccount:
   create: true
   name:
