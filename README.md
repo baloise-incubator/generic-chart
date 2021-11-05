@@ -66,6 +66,7 @@ You can find an example setup using the generic-chart in the [examples directory
 |**args** | Sets [`args`](https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#define-a-command-and-arguments-when-you-create-a-pod) for the `Pod`. | `[]` |
 |**initContainers** | Sets [`initContainers`](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/) for the `Pod`. | `[]` |
 |**additionalContainers** | Define additional containers for the `Pod`. | `[]` |
-
+| **enableServiceMesh** | Enable or disable deployment of pods in a service mesh | `false` |
+| **serviceMeshName** | Destination Service Mesh name in which pods needs to be deployed | `nil` |
 ## Contributions
 If you contribute new featuers or fix a bug, please update the `.version` in the `Chart.yaml` according to [SemVer](https://semver.org/) and update the documentation.
