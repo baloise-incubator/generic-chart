@@ -1,3 +1,7 @@
+# 3.3.0 (2021-11-05)
+## Features
+- Add support for deploying workloads in a designated service mesh.
+
 # 3.2.0 (2021-07-22)
 ## Breaking Change
 - Remove `persistence.storageClass` default `trident-nfs-snapshot`. This leads to using the default storage class defined in the corresponding OpenShift cluster.
