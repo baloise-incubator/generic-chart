@@ -63,7 +63,9 @@ metadata:
   namespace: {{ $.Values.serviceMeshName }}
 spec:
   host: {{ if $val.ingress.host }}{{ $val.ingress.host }}{{ else }}{{ $hostname }}{{ end }} 
+{{- if not (eq "$val.ingress.termination" "passthrough") }}
   path: {{ default "/" $val.ingress.path }}
+{{- end }}
   port:
     targetPort: http2
   tls:
