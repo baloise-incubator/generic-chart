@@ -37,19 +37,18 @@ spec:
   selector:
     istio: ingressgateway
   servers:
-{{- if ne "$val.ingress.termination" "passthrough" }}
-  - port:
-     number: 80
-     name: {{ printf "%s" (include "generic-chart.name" $) }}
-     protocol: HTTP
-{{- end }}
-{{- if eq "$val.ingress.termination" "passthrough" }}
+{{- if eq $val.ingress.termination "passthrough" }}
   - port:
      number: 443
      name: {{ printf "%s" (include "generic-chart.name" $) }}
      protocol: HTTPS
     tls:
      mode: PASSTHROUGH
+{{- else }}
+  - port:
+     number: 80
+     name: {{ printf "%s" (include "generic-chart.name" $) }}
+     protocol: HTTP
 {{- end }}
     hosts:
     - {{ if $val.ingress.host }}{{ $val.ingress.host }}{{ else }}{{ $hostname }}{{ end }}
@@ -59,11 +58,12 @@ kind: Route
 metadata:
   labels:
 {{ include "generic-chart.labels" $ | indent 4 }}
-  name: {{ printf "%s" (include "generic-chart.name" $ ) }}
+  name: {{ printf "%s-%s" (include "generic-chart.name" $ ) ( $.Release.Name ) }}
   namespace: {{ $.Values.serviceMeshName }}
 spec:
   host: {{ if $val.ingress.host }}{{ $val.ingress.host }}{{ else }}{{ $hostname }}{{ end }} 
-{{- if ne "$val.ingress.termination" "passthrough" }}
+{{- if eq $val.ingress.termination "passthrough" }}
+{{- else }}
   path: {{ default "/" $val.ingress.path }}
 {{- end }}
   port:
