@@ -32,6 +32,7 @@ You can find an example setup using the generic-chart in the [examples directory
 | **network.{}.ingress.annotations** | Sets [`annotations`](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) for the `Ingress` or `Route` instance | `{}` |
 | **network.{}.ingress.path** | Sets the path for the `Ingress` or `Route` instance | `/` |
 | **network.{}.ingress.termination** | [TLS termination](https://docs.openshift.com/container-platform/3.11/architecture/networking/routes.html#route-types) for the `Ingress` or `Route` instance. Possible values are `edge`, `passthrough` or `reencrypt` | `edge` |
+| **network.{}.ingress.enableIstioIngressGateway** | Publish this service outside service mesh| `false`
 | **network.{}.serviceMonitor**| If set to `{}` creates a `ServiceMonitor` for the `Service` and its `servicePort` with default values for `interval`,`path` and `scheme` | `nil` |
 | **network.{}.serviceMonitor.interval**| Interval at which metrics should be scraped | `30s` |
 | **network.{}.serviceMonitor.path**| HTTP path to scrape for metrics. | `/metrics` |
