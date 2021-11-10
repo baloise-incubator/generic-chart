@@ -68,6 +68,5 @@ You can find an example setup using the generic-chart in the [examples directory
 |**initContainers** | Sets [`initContainers`](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/) for the `Pod`. | `[]` |
 |**additionalContainers** | Define additional containers for the `Pod`. | `[]` |
 | **enableServiceMesh** | Enable or disable deployment of pods in a service mesh | `false` |
-| **serviceMeshName** | Name of the service mesh in which pods will be deployed. Must be set to a valid serviceMeshName if enableServiceMesh is true | `nil` |
 ## Contributions
 If you contribute new featuers or fix a bug, please update the `.version` in the `Chart.yaml` according to [SemVer](https://semver.org/) and update the documentation.
