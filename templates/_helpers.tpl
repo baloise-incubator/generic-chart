@@ -27,17 +27,16 @@ version: {{ .Chart.AppVersion | quote }}
 
 {{/*
 Create default route host depending on `.Chart.Name`, `.Release.Name`
-and `.Values.ingress.zone` ("ch" or "shared")
+and `.Values.ingress.clusterName` ("caasd01" or "caast01" or "caasp01")
 */}}
   {{- define "generic-chart.host" -}}
-    {{- if .Values.ingress.zone -}}
+    {{- if .Values.ingress.clusterName -}}
     {{- $base := .Release.Name | trunc 63 | trimSuffix "-" -}}
-    {{- $isProd := hasSuffix "-prod" .Release.Name -}}
-    {{- $prefix := .Values.ingress.zone | default "" | regexFind "^(ch)|(sh)" | required "A valid .Values.ingress.zone is required when using default host!" -}}
-    {{- $suffix := $isProd | ternary "" "-test" -}}
-    {{- printf "%s.%sapp%s.os1.balgroupit.com" $base $prefix $suffix -}}
+    {{- $clusterName := .Values.ingress.clusterName | default "" | regexFind "^(caasd01)|(caast01)|(caasp01)" | required "A valid .Values.ingress.clusterName is required when using default host!" -}}
+    {{- printf "%s.apps.%s.balgroupit.com" $base $clusterName -}}
   {{- end -}}
 {{- end -}}
+
 
 {{/*
 Create the name of the service account to use

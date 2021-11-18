@@ -1,11 +1,12 @@
-{{ if and (.Values.network) (eq "Route" .Values.ingress.controller) }}
+{{- if not ( .Values.enableServiceMesh ) }}
+{{- if and ( .Values.network ) (eq "Route" .Values.ingress.controller) }}
 {{- range $key, $val := .Values.network }}
-{{- if not (kindIs "invalid" $val.ingress) }}
-{{- if and (not $val.ingress.host) (not $.Values.ingress.zone) }}
-{{- fail "either .network.{}.ingress.host or .ingress.zone must be set" }}
+{{- if not ( kindIs "invalid" $val.ingress ) }}
+{{- if and (not $val.ingress.host) (not $.Values.ingress.clusterName) }}
+{{- fail "either .network.{}.ingress.host or .ingress.clusterName must be set" }}
 {{- end -}}
 {{- if and (not $val.ingress.host) (gt (len $.Values.network) 1) }}
-{{- fail ".ingress.zone only supported for single .network.{}.ingress" }}
+{{- fail ".ingress.clusterName only supported for single .network.{}.ingress" }}
 {{- end }}
 ---
 apiVersion: route.openshift.io/v1
@@ -22,7 +23,7 @@ spec:
   host: {{ if $val.ingress.host }}{{ $val.ingress.host }}{{ else }}{{ printf "%s-%s" (include "generic-chart.name" $ ) (include "generic-chart.host" $) }}{{ end }}
   path: {{ default "/" $val.ingress.path }}
   port:
-    targetPort: {{ $key }}    
+    targetPort: {{ $key }}
   tls:
     insecureEdgeTerminationPolicy: {{ default "Redirect" $val.ingress.insecureEdgeTerminationPolicy }}
     termination: {{ default "edge" $val.ingress.termination }}
@@ -31,9 +32,7 @@ spec:
     name: {{ include "generic-chart.name" $ }}
     weight: 100
   wildcardPolicy: None
-status:
-  ingress:
-    - routerName: router
-{{ end }}
+{{- end }}
+{{- end }}
 {{- end }}
 {{- end }}

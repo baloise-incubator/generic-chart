@@ -16,11 +16,23 @@ spec:
 {{- if gt (len .Values.annotations ) 0 }}
       annotations:
         {{- toYaml .Values.annotations | nindent 8 }}
+{{- if .Values.enableServiceMesh }}
+        sidecar.istio.io/inject: "true"
+{{- end }}
+{{- end }}
+{{- if eq (len .Values.annotations ) 0 }}
+{{- if .Values.enableServiceMesh }}
+      annotations:
+        sidecar.istio.io/inject: "true"
+{{- end }}
 {{- end }}
       labels:
         app: {{ include "generic-chart.name" . }}
         release: {{ .Release.Name }}
     spec:
+{{- if .Values.enableServiceMesh }}
+      automountServiceAccountToken: true
+{{- end }}
       topologySpreadConstraints:
       - maxSkew: 1
         topologyKey: topology.kubernetes.io/{{ .Values.zone }}
@@ -60,9 +72,9 @@ spec:
           ports:
         {{- if .Values.network }}
         {{- range $key, $val := .Values.network }}
-            - name: {{ $key }}             
+            - name: {{ $key }}
               containerPort: {{ default $val.servicePort $val.containerPort }}
-              protocol: {{ default "TCP" $val.protocol }} 
+              protocol: {{ default "TCP" $val.protocol }}
         {{- end }}
         {{- end }}
 {{- if gt (len .Values.livenessProbe) 0 }}

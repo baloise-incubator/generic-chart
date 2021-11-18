@@ -7,6 +7,7 @@ image:
   pullPolicy: IfNotPresent
 imagePullSecrets: []
 nameOverride: ""
+enableServiceMesh: false
 serviceAccount:
   create: true
   name:
@@ -15,6 +16,7 @@ serviceAccount:
 network:
   http:
     servicePort: 8080
+    enableIstioIngressGateway: false
 #    serviceMonitor: {}
 #    ingress:
 #      host: application-test.chapp-test.os1.balgroupit.com
