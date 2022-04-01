@@ -11,6 +11,7 @@ spec:
     matchLabels:
       app: {{ include "generic-chart.name" . }}
       release: {{ .Release.Name }}
+  strategy: {{- toYaml .Values.deployment.strategy | nindent 4 }}
   template:
     metadata:
 {{- if gt (len .Values.annotations ) 0 }}
