@@ -7,6 +7,9 @@ image:
   pullPolicy: IfNotPresent
 imagePullSecrets: []
 nameOverride: ""
+deployment:
+  strategy:
+    type: RollingUpdate
 enableServiceMesh: false
 serviceAccount:
   create: true
