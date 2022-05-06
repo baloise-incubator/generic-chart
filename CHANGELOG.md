@@ -1,3 +1,7 @@
+# 3.4.1 (2022-05-06)
+## Fixes
+- Include chart name template in container name to make `nameOverride` work
+
 # 3.3.0 (2021-11-05)
 ## Features
 - Add support for deploying workloads in a designated service mesh.
