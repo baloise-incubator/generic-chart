@@ -57,7 +57,7 @@ spec:
     {{- if .Values.additionalContainers }}
         {{ toYaml .Values.additionalContainers | nindent 8 }}
     {{- end }}
-        - name: {{ .Chart.Name }}
+        - name: {{ include "generic-chart.name" . }}
         {{- if .Values.command }}
           command:
             {{- toYaml .Values.command | nindent 12 }}
