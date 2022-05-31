@@ -9,7 +9,7 @@ metadata:
 {{- toYaml .Values.persistence.annotations | nindent 4 }}
 {{- end }}
   name: {{ default ( include "generic-chart.name" . ) .Values.persistence.name }}
-  namespace: {{ include "generic-chart.namespace" . }}
+  namespace: {{ template "generic-chart.namespace" $ }}
 spec:
   accessModes:
     - {{ .Values.persistence.accessModes }}
