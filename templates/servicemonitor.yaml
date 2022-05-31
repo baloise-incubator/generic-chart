@@ -5,6 +5,7 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: {{ printf "%s-%s" (include "generic-chart.name" $ ) $key }}
+  namespace: {{ include "generic-chart.namespace" . }}
   labels:
 {{ include "generic-chart.labels" $ | indent 4 }}
 spec:

@@ -20,6 +20,7 @@ You can find an example setup using the generic-chart in the [examples directory
 | **image.pullPolicy** | The pull policy when a image should be pulled (`IfNotPresent`, `Always`) | `IfNotPresent` |
 | **imagePullSecrets** | Reference a `Secret` which should be use to authenticate against a container registry | `nil` |
 | **nameOverride** | Override the fullname with this name | "" |
+| **namespaceOverride** | Overrides the namespace in every resource | `nil` |
 | **serviceAccount.create** | If a `ServiceAccount` should be created. If `false` a `ServiceAccount` must be provided and configured correctly with its name under `serviceAccount.name`.  | `true` |
 | **serviceAccount.name** | Name of the `ServiceAccount`. If not set and create is true, a name is generated using the name template | `nil` |
 | **serviceAccount.automountServiceAccountToken** | If `true` the `Secret` with the `Token` and `Certificates`  of the `ServiceAccount` is mounted. Only required when access to the master API is necessary | `false` |

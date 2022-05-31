@@ -15,6 +15,7 @@ metadata:
   labels:
 {{ include "generic-chart.labels" $ | indent 4 }}
   name: {{ printf "%s-%s" (include "generic-chart.name" $ ) $key }}
+  namespace: {{ include "generic-chart.namespace" . }}
 {{- if $val.ingress.annotations }}
   annotations:
     {{- toYaml $val.ingress.annotations | nindent 4 }}
