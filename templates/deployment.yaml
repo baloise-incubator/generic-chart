@@ -3,6 +3,10 @@ kind: Deployment
 metadata:
   name: {{ include "generic-chart.name" . }}
   namespace: {{ template "generic-chart.namespace" $ }}
+{{- if .Values.enableReloader }}
+  annotations:
+    reloader.stakater.com/auto: "true"
+{{- end }}
   labels:
 {{ include "generic-chart.labels" . | indent 4 }}
 spec:

@@ -11,6 +11,7 @@ deployment:
   strategy:
     type: RollingUpdate
 enableServiceMesh: false
+enableReloader: false
 serviceAccount:
   create: true
   name:
