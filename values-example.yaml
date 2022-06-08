@@ -74,3 +74,4 @@ tolerations: []
 affinity: {}
 defaultAffinityRules: {}
 annotations: {}
+enableReloader: true

@@ -1,6 +1,18 @@
+# 3.6.0 (2022-06-08)
+## Features
+- Add support for [Reloader](https://github.com/stakater/Reloader)
+
+# 3.5.0 (2022-05-31)
+## Features
+- Add support to override target namespace
+
 # 3.4.1 (2022-05-06)
 ## Fixes
 - Include chart name template in container name to make `nameOverride` work
+
+# 3.4.0 (2022-04-01)
+## Features
+- Add support for deploying strategies.
 
 # 3.3.0 (2021-11-05)
 ## Features
