@@ -1,9 +1,13 @@
 {{ if .Values.network }}
+{{- if eq (default "clusterIP" .Values.service.type) "LoadBalancer" }} 
+{{- if not (.Values.service.loadBalancerIP) }}
+{{- fail "If .Values.service.type is LoadBalancer then .Values.service.loadBalancerIP must be set" }}
+{{- end -}}
+{{- end -}}
 apiVersion: v1
 kind: Service
 metadata:
   name: {{ include "generic-chart.name" . }}
-  namespace: {{ template "generic-chart.namespace" $ }}
   labels:
 {{ include "generic-chart.labels" . | indent 4 }}
 {{- if gt (len .Values.service.annotations) 0 }}
@@ -11,7 +15,10 @@ metadata:
 {{- toYaml .Values.service.annotations | nindent 4 }}
 {{- end }}
 spec:
-  type: {{ .Values.service.type }}
+  type: {{ default "clusterIP" .Values.service.type }}
+{{- if eq (default "clusterIP" .Values.service.type) "LoadBalancer" }} 
+  loadBalancerIP: {{ .Values.service.loadBalancerIP }}
+{{- end }}
   ports:
   {{- range $key, $val := .Values.network }}
   {{- if $val.servicePort}}
