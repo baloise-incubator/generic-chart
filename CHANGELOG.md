@@ -1,3 +1,7 @@
+# 3.7.0 (2022-06-10)
+## Features
+- Add support for service type LoadBalancer
+
 # 3.6.0 (2022-06-08)
 ## Features
 - Add support for [Reloader](https://github.com/stakater/Reloader)
