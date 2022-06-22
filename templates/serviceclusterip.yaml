@@ -1,18 +1,18 @@
-{{ if .Values.networkClusterIP }}
+{{ if .Values.network }}
 apiVersion: v1
 kind: Service
 metadata:
   name: {{ include "generic-chart.name" . }}
   labels:
 {{ include "generic-chart.labels" . | indent 4 }}
-{{- if gt (len .Values.networkClusterIPAnnotations) 0 }}
+{{- if gt (len .Values.networkAnnotations) 0 }}
   annotations:
-{{- toYaml .Values.networkClusterIPAnnotations | nindent 4 }}
+{{- toYaml .Values.networkAnnotations | nindent 4 }}
 {{- end }}
 spec:
   type: ClusterIP
   ports:
-  {{- range $key, $val := .Values.networkClusterIP }}
+  {{- range $key, $val := .Values.network }}
   {{- if $val.servicePort}}
   - name: {{ $key }}    
     port: {{ $val.servicePort }}

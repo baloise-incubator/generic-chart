@@ -1,11 +1,11 @@
 {{- if not ( .Values.enableServiceMesh ) }}
-{{- if and ( .Values.networkClusterIP ) (eq "Route" .Values.ingress.controller) }}
-{{- range $key, $val := .Values.networkClusterIP }}
+{{- if and ( .Values.network ) (eq "Route" .Values.ingress.controller) }}
+{{- range $key, $val := .Values.network }}
 {{- if not ( kindIs "invalid" $val.ingress ) }}
 {{- if and (not $val.ingress.host) (not $.Values.ingress.clusterName) }}
 {{- fail "either .network.{}.ingress.host or .ingress.clusterName must be set" }}
 {{- end -}}
-{{- if and (not $val.ingress.host) (gt (len $.Values.networkClusterIP) 1) }}
+{{- if and (not $val.ingress.host) (gt (len $.Values.network) 1) }}
 {{- fail ".ingress.clusterName only supported for single .network.{}.ingress" }}
 {{- end }}
 ---

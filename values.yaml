@@ -18,7 +18,7 @@ serviceAccount:
   automountServiceAccountToken: false
   annotations: {}
 
-networkClusterIP:
+network:
   http:
     servicePort: 8080
     enableIstioIngressGateway: false
@@ -29,7 +29,7 @@ networkClusterIP:
     enableIstioIngressGateway: false
     ingress:
       host: application-test1.apps.caasd01.balgroupit.com
-networkClusterIPAnnotations: {}
+networkAnnotations: {}
 
 networkLoadBalancer:
   api:
