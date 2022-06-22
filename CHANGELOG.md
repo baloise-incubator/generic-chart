@@ -1,3 +1,7 @@
+# 3.8.0 (2022-06-22)
+## Features
+- Add support for creation of service type LoadBalancer and service type clusterIP for same pod with different ports
+
 # 3.7.0 (2022-06-10)
 ## Features
 - Add support for service type LoadBalancer
