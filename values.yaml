@@ -41,7 +41,6 @@ networkLoadBalancerAnnotations: {}
 
 ingress:
   controller: Route
-  clusterName: caasd01
 env: []
 envFrom: []
 persistence:
