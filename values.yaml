@@ -17,18 +17,31 @@ serviceAccount:
   name:
   automountServiceAccountToken: false
   annotations: {}
-network:
+
+networkClusterIP:
   http:
     servicePort: 8080
     enableIstioIngressGateway: false
-#    serviceMonitor: {}
-#    ingress:
-#      host: application-test.chapp-test.os1.balgroupit.com
-service:
-  type: ClusterIP
-  annotations: {}
+    ingress:
+      host: application-test.apps.caasd01.balgroupit.com
+  http2:
+    servicePort: 8081
+    enableIstioIngressGateway: false
+    ingress:
+      host: application-test1.apps.caasd01.balgroupit.com
+networkClusterIPAnnotations: {}
+
+networkLoadBalancer:
+  api:
+    servicePort: 6443
+  api2:
+    servicePort: 7443
+LoadBalancerIP: 10.1.1.1
+networkLoadBalancerAnnotations: {}
+
 ingress:
   controller: Route
+  clusterName: caasd01
 env: []
 envFrom: []
 persistence:
