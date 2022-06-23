@@ -1,0 +1,71 @@
+replicaCount: 1
+revisionHistoryLimit: 1
+zone: any
+image:
+#  repository: quay.balgroupit.com/example/nginx-sample
+#  tag: latest
+  pullPolicy: IfNotPresent
+imagePullSecrets: []
+nameOverride: ""
+deployment:
+  strategy:
+    type: RollingUpdate
+enableServiceMesh: false
+enableReloader: false
+serviceAccount:
+  create: true
+  name:
+  automountServiceAccountToken: false
+  annotations: {}
+
+network:
+  http:
+    servicePort: 8080
+    enableIstioIngressGateway: false
+    ingress:
+      host: application-test.apps.caasd01.balgroupit.com
+
+service:
+  type: ClusterIP
+  annotations: {}
+
+serviceLoadBalancer:
+  api:
+    servicePort: 6443
+serviceLoadBalancerIP: 10.1.1.1
+serviceLoadBalancerAnnotations: {}
+
+ingress:
+  controller: Route
+
+env: []
+envFrom: []
+persistence:
+  enabled: false
+  accessModes: ReadWriteOnce
+  storageClass:
+  annotations: {}
+#  size: 1Gi
+#  volumeMount: /var/app/data/
+volumes: []
+volumeMounts: []
+readinessProbe: {}
+#  httpGet:
+#    path: /
+#    port: http
+livenessProbe: {}
+#  httpGet:
+#    path: /
+#    port: http
+resources: {}
+podSecurityContext: {}
+securityContext: {}
+nodeSelector: {}
+tolerations: []
+affinity: {}
+defaultAffinityRules:
+  enabled: true
+annotations: {}
+command: []
+args: []
+initContainers: []
