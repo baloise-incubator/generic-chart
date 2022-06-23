@@ -24,3 +24,4 @@ spec:
     app: {{ include "generic-chart.name" . }}
     release: {{ .Release.Name }}
 {{- end }}
+
