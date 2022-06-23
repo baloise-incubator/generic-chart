@@ -1,6 +1,6 @@
-{{ if .Values.networkLoadBalancer }}
-{{- if not (.Values.LoadBalancerIP) }}
-{{- fail "If .Values.LoadBalancer is not null then .Values.LoadBalancerIP must be set" }}
+{{ if .Values.serviceLoadBalancer }}
+{{- if not (.Values.serviceLoadBalancerIP) }}
+{{- fail "If .Values.serviceLoadBalancer is not null then .Values.serviceLoadBalancerIP must be set" }}
 {{- end -}}
 apiVersion: v1
 kind: Service
@@ -8,15 +8,15 @@ metadata:
   name: {{ include "generic-chart.name" . }}-lb
   labels:
 {{ include "generic-chart.labels" . | indent 4 }}
-{{- if gt (len .Values.networkLoadBalancerAnnotations) 0 }}
+{{- if gt (len .Values.serviceLoadBalancerAnnotations) 0 }}
   annotations:
-{{- toYaml .Values.networkLoadBalancerAnnotations | nindent 4 }}
+{{- toYaml .Values.serviceLoadBalancerAnnotations | nindent 4 }}
 {{- end }}
 spec:
   type: LoadBalancer
-  loadBalancerIP: {{ .Values.LoadBalancerIP }}
+  loadBalancerIP: {{ .Values.serviceLoadBalancerIP }}
   ports:
-  {{- range $key, $val := .Values.networkLoadBalancer }}
+  {{- range $key, $val := .Values.serviceLoadBalancer }}
   {{- if $val.servicePort}}
   - name: {{ $key }}    
     port: {{ $val.servicePort }}

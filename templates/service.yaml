@@ -5,12 +5,12 @@ metadata:
   name: {{ include "generic-chart.name" . }}
   labels:
 {{ include "generic-chart.labels" . | indent 4 }}
-{{- if gt (len .Values.networkAnnotations) 0 }}
+{{- if gt (len .Values.service.annotations) 0 }}
   annotations:
-{{- toYaml .Values.networkAnnotations | nindent 4 }}
+{{- toYaml .Values.service.annotations | nindent 4 }}
 {{- end }}
 spec:
-  type: ClusterIP
+  type: {{ .Values.service.type }}
   ports:
   {{- range $key, $val := .Values.network }}
   {{- if $val.servicePort}}
