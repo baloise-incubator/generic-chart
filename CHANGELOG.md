@@ -1,3 +1,8 @@
+# 3.8.1 (2022-06-24)
+## Bugfix
+- Include chart name template in container name to make `nameOverride` work. Bug was introduced in 3.7.0.
+
+
 # 3.8.0 (2022-06-22)
 ## Features
 - Add support for creation of service type LoadBalancer and service type clusterIP for same pod with different ports
