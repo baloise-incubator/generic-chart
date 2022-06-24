@@ -3,6 +3,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ include "generic-chart.name" . }}
+  namespace: {{ template "generic-chart.namespace" $ }}
   labels:
 {{ include "generic-chart.labels" . | indent 4 }}
 {{- if gt (len .Values.service.annotations) 0 }}
