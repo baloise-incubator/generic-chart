@@ -1,15 +1,15 @@
-replicaCount: 1
+replicaCount: 2
 revisionHistoryLimit: 1
 zone: any
 image:
-#  repository: quay.balgroupit.com/example/nginx-sample
-#  tag: latest
+  repository: quay.balgroupit.com/education/devops-stack-nginx-demo
+  tag: ab3a925a155e0afa2513082350cedb8ece917650
   pullPolicy: IfNotPresent
 imagePullSecrets: []
 nameOverride: ""
 deployment:
   stateful:
-    enabled: false
+    enabled: true
     podManagementPolicy: OrderedReady
     servicePerPod: true
     routePerService: true
@@ -27,8 +27,8 @@ network:
     servicePort: 8080
     enableIstioIngressGateway: false
 #    serviceMonitor: {}
-#    ingress:
-#      host: application-test.chapp-test.os1.balgroupit.com
+    ingress:
+      host: gitops-demo.apps.caasd01.balgroupit.com
 service:
   type: ClusterIP
   annotations: {}

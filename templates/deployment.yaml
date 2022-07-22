@@ -1,5 +1,9 @@
 apiVersion: apps/v1
+{{- if .Values.deployment.stateful.enabled }}
+kind: StatefulSet
+{{- else }}
 kind: Deployment
+{{- end }}
 metadata:
   name: {{ include "generic-chart.name" . }}
   namespace: {{ template "generic-chart.namespace" $ }}
@@ -16,7 +20,13 @@ spec:
     matchLabels:
       app: {{ include "generic-chart.name" . }}
       release: {{ .Release.Name }}
+{{- if .Values.deployment.stateful.enabled }}
+  updateStrategy: {{- toYaml .Values.deployment.strategy | nindent 4 }}
+  podManagementPolicy: {{ .Values.deployment.stateful.podManagementPolicy }}
+  serviceName: {{ include "generic-chart.name" . }}
+{{- else }}
   strategy: {{- toYaml .Values.deployment.strategy | nindent 4 }}
+{{- end }}
   template:
     metadata:
 {{- if gt (len .Values.annotations ) 0 }}
