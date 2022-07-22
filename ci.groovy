@@ -23,6 +23,17 @@ pipeline {
 
         stage("Helm Push") {
             when {
+                not {
+                    branch 'master'
+                }
+            }
+            steps {
+                helmPush tenant: 'shared', version: "3.0.0-${GIT_COMMIT}"
+            }
+        }
+
+        stage("Helm Release") {
+            when {
                 branch 'master'
             }
             steps {

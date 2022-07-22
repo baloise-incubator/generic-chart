@@ -1,3 +1,7 @@
+# 3.9.0 (2022-07-22)
+## Feature
+- Add support for StatefulSets, including Service per Pod and Route per Service
+
 # 3.8.1 (2022-06-24)
 ## Bugfix
 - Include chart name template in container name to make `nameOverride` work. Bug was introduced in 3.7.0.
