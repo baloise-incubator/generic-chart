@@ -1,3 +1,10 @@
+# 3.10.0 (2022-07-25)
+## Feature
+- Add support for ExternalSecrets with Vault (referencing Vault secrets, mount them as env and/or as file)
+- Fail if image.repository or image.tag is not set
+- Unify how to handle "empty" values
+- Format helm templates
+
 # 3.9.4 (2022-07-24)
 ## Tests
 - Added snapshot tests

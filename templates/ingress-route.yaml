@@ -1,24 +1,21 @@
 {{- if not ( .Values.enableServiceMesh ) }}
-{{- if and ( .Values.network ) (eq "Route" .Values.ingress.controller) }}
-{{- range $key, $val := .Values.network }}
-{{- if not ( kindIs "invalid" $val.ingress ) }}
-{{- if and (not $val.ingress.host) (not $.Values.ingress.clusterName) }}
-{{- fail "either .network.{}.ingress.host or .ingress.clusterName must be set" }}
-{{- end -}}
-{{- if and (not $val.ingress.host) (gt (len $.Values.network) 1) }}
-{{- fail ".ingress.clusterName only supported for single .network.{}.ingress" }}
-{{- end }}
+  {{- if and ( .Values.network ) (eq "Route" .Values.ingress.controller) }}
+    {{- range $key, $val := .Values.network }}
+      {{- if not ( kindIs "invalid" $val.ingress ) }}
+        {{- if and (not $val.ingress.host) (not $.Values.ingress.clusterName) }}
+          {{- fail "either .network.{}.ingress.host or .ingress.clusterName must be set" }}
+        {{- end -}}
+        {{- if and (not $val.ingress.host) (gt (len $.Values.network) 1) }}
+          {{- fail ".ingress.clusterName only supported for single .network.{}.ingress" }}
+        {{- end }}
 ---
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
-  labels: {{ include "generic-chart.labels" $ | nindent 4 }}
   name: {{ include "generic-chart.name" $ }}-{{ $key }}
   namespace: {{ template "generic-chart.namespace" $ }}
-{{- if $val.ingress.annotations }}
-  annotations:
-    {{- toYaml $val.ingress.annotations | nindent 4 }}
-{{- end }}
+  labels: {{ include "generic-chart.labels" $ | nindent 4 }}
+  annotations: {{- if $val.ingress.annotations }}{{- toYaml $val.ingress.annotations | nindent 4 }}{{- end }}
 spec:
   host: {{ if $val.ingress.host }}{{ $val.ingress.host }}{{ else }}{{ printf "%s-%s" (include "generic-chart.name" $ ) (include "generic-chart.host" $) }}{{ end }}
   path: {{ default "/" $val.ingress.path }}
@@ -32,7 +29,7 @@ spec:
     name: {{ include "generic-chart.name" $ }}
     weight: 100
   wildcardPolicy: None
-{{- end }}
-{{- end }}
-{{- end }}
+        {{- end }}
+      {{- end }}
+    {{- end }}
 {{- end }}

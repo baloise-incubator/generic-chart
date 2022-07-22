@@ -34,6 +34,11 @@ service:
   annotations: {}
 ingress:
   controller: Route
+externalSecret:
+  addAsEnv: true
+  mountDirectory:
+  overrideName:
+  refs: []
 env: []
 envFrom: []
 persistence:

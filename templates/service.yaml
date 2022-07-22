@@ -4,22 +4,18 @@ kind: Service
 metadata:
   name: {{ include "generic-chart.name" . }}
   namespace: {{ template "generic-chart.namespace" $ }}
-  labels:
-{{ include "generic-chart.labels" . | indent 4 }}
-{{- if gt (len .Values.service.annotations) 0 }}
-  annotations:
-{{- toYaml .Values.service.annotations | nindent 4 }}
-{{- end }}
+  labels: {{- include "generic-chart.labels" . | nindent 4 }}
+  annotations: {{- if gt (len .Values.service.annotations) 0 }}{{- toYaml .Values.service.annotations | nindent 4 }}{{- end }}
 spec:
   type: {{ .Values.service.type }}
   ports:
   {{- range $key, $val := .Values.network }}
-  {{- if $val.servicePort}}
+    {{- if $val.servicePort}}
   - name: {{ $key }}    
     port: {{ $val.servicePort }}
     protocol: {{ default "TCP" $val.protocol }}
     targetPort: {{ default $key $val.targetPort }}
-  {{- end }}
+    {{- end }}
   {{- end }}
   selector:
     app: {{ include "generic-chart.name" . }}

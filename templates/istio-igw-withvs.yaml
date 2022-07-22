@@ -1,21 +1,20 @@
 {{- if .Values.enableServiceMesh }}
-{{- $hostname := printf "%s-%s" (include "generic-chart.name" $) (include "generic-chart.host" $) }}
-{{- range $key, $val := .Values.network }}
-{{- if $val.ingress.enableIstioIngressGateway }}
-{{- if not ( kindIs "invalid" $val.ingress ) }}
-{{- if and (not $val.ingress.host) (not $.Values.ingress.clusterName) }}
-{{- fail "either .network.{}.ingress.host or .ingress.clusterName must be set" }}
-{{- end -}}
-{{- if and (not $val.ingress.host) (gt (len $.Values.network) 1) }}
-{{- fail ".ingress.clusterName only supported for single .network.{}.ingress" }}
-{{- end }}
+  {{- $hostname := printf "%s-%s" (include "generic-chart.name" $) (include "generic-chart.host" $) }}
+  {{- range $key, $val := .Values.network }}
+      {{- if $val.ingress.enableIstioIngressGateway }}
+        {{- if not ( kindIs "invalid" $val.ingress ) }}
+          {{- if and (not $val.ingress.host) (not $.Values.ingress.clusterName) }}
+            {{- fail "either .network.{}.ingress.host or .ingress.clusterName must be set" }}
+          {{- end -}}
+          {{- if and (not $val.ingress.host) (gt (len $.Values.network) 1) }}
+            {{- fail ".ingress.clusterName only supported for single .network.{}.ingress" }}
+          {{- end }}
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: {{ printf "%s" (include "generic-chart.name" $) }}
   namespace: {{ include "generic-chart.namespace" $ }}
-  labels:
-{{ include "generic-chart.labels" $ | indent 4 }}
+  labels: {{- include "generic-chart.labels" $ | nindent 4 }}
 spec:
   hosts:
   - {{ if $val.ingress.host }}{{ $val.ingress.host }}{{ else }}{{ $hostname }}{{ end }}
@@ -33,28 +32,27 @@ kind: Gateway
 metadata:
   name: {{ printf "%s" (include "generic-chart.name" $ ) }}
   namespace: {{ include "generic-chart.namespace" $ }}
-  labels:
-{{ include "generic-chart.labels" $ | indent 4 }}
+  labels: {{- include "generic-chart.labels" $ | nindent 4 }}
 spec:
   selector:
     istio: ingressgateway
   servers:
-{{- if eq (default "edge" $val.ingress.termination) "passthrough" }}
+  {{- if eq (default "edge" $val.ingress.termination) "passthrough" }}
   - port:
      number: 443
      name: {{ printf "%s" (include "generic-chart.name" $) }}
      protocol: HTTPS
     tls:
      mode: PASSTHROUGH
-{{- else }}
+  {{- else }}
   - port:
      number: 80
      name: {{ printf "%s" (include "generic-chart.name" $) }}
      protocol: HTTP
-{{- end }}
+  {{- end }}
     hosts:
     - {{ if $val.ingress.host }}{{ $val.ingress.host }}{{ else }}{{ $hostname }}{{ end }}
-{{- end }}
-{{- end }}
-{{- end }}
+      {{- end }}
+    {{- end }}
+  {{- end }}
 {{- end }}

@@ -1,3 +1,12 @@
+{{- $addExternalSecretAsVolume := false }}
+{{- if and .Values.externalSecret.mountPath }}
+  {{- $addExternalSecretAsVolume = true }}
+{{- end }}
+{{- range $ref := .Values.externalSecret.refs }}
+  {{- if $ref.mountPath }}
+    {{- $addExternalSecretAsVolume = true }}
+  {{- end }}
+{{- end }}
 apiVersion: apps/v1
 {{- if .Values.deployment.stateful.enabled }}
 kind: StatefulSet
@@ -11,8 +20,7 @@ metadata:
   annotations:
     reloader.stakater.com/auto: "true"
 {{- end }}
-  labels:
-{{ include "generic-chart.labels" . | indent 4 }}
+  labels: {{- include "generic-chart.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
@@ -29,26 +37,17 @@ spec:
 {{- end }}
   template:
     metadata:
-{{- if gt (len .Values.annotations ) 0 }}
-      annotations:
-        {{- toYaml .Values.annotations | nindent 8 }}
-{{- if .Values.enableServiceMesh }}
+      annotations: {{- if gt (len .Values.annotations ) 0 }}{{- toYaml .Values.annotations | nindent 8 }}{{- end }}
+      {{- if .Values.enableServiceMesh }}
         sidecar.istio.io/inject: "true"
-{{- end }}
-{{- end }}
-{{- if eq (len .Values.annotations ) 0 }}
-{{- if .Values.enableServiceMesh }}
-      annotations:
-        sidecar.istio.io/inject: "true"
-{{- end }}
-{{- end }}
+      {{- end }}
       labels:
         app: {{ include "generic-chart.name" . }}
         release: {{ .Release.Name }}
     spec:
-{{- if .Values.enableServiceMesh }}
+    {{- if .Values.enableServiceMesh }}
       automountServiceAccountToken: true
-{{- end }}
+    {{- end }}
       topologySpreadConstraints:
       - maxSkew: 1
         topologyKey: topology.kubernetes.io/{{ .Values.zone }}
@@ -58,87 +57,65 @@ spec:
            app: {{ include "generic-chart.name" . }}
            release: {{ .Release.Name }}
       serviceAccountName: {{ template "generic-chart.serviceAccountName" . }}
-    {{- with .Values.imagePullSecrets }}
-      imagePullSecrets:
-        {{- toYaml . | nindent 8 }}
-    {{- end }}
-      securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 8 }}
-    {{- if .Values.initContainers }}
-      initContainers:
-        {{ toYaml .Values.initContainers | nindent 8 }}
-    {{- end }}
-      containers:
-    {{- if .Values.additionalContainers }}
-        {{ toYaml .Values.additionalContainers | nindent 8 }}
-    {{- end }}
+      imagePullSecrets: {{- if gt (len .Values.imagePullSecrets) 0 }}{{- toYaml .Values.imagePullSecrets | nindent 8 }}{{- end }}
+      securityContext: {{- if gt (len .Values.podSecurityContext) 0 }}{{- toYaml .Values.podSecurityContext | nindent 8 }}{{- end }}
+      initContainers: {{- if gt (len .Values.initContainers) 0 }}{{- toYaml .Values.initContainers | nindent 8 }}{{- end }}
+      containers: {{- if .Values.additionalContainers }}{{- toYaml .Values.additionalContainers | nindent 8 }}{{- end }}
         - name: {{ include "generic-chart.name" . }}
-        {{- if .Values.command }}
-          command:
-            {{- toYaml .Values.command | nindent 12 }}
-        {{- end }}
-        {{- if .Values.args }}
-          args:
-            {{- toYaml .Values.args | nindent 12 }}
-        {{- end }}
-          securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          command: {{- if gt (len .Values.command) 0 }}{{- toYaml .Values.command | nindent 12 }}{{- end }}
+          args: {{- if gt (len .Values.args) 0 }}{{- toYaml .Values.args | nindent 12 }}{{- end }}
+          securityContext: {{- if gt (len .Values.securityContext) 0 }}{{- toYaml .Values.securityContext | nindent 12 }}{{- end }}
+          image: "{{ required "image.repository is required" .Values.image.repository }}:{{ required "image.tag is required" .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
-        {{- if .Values.network }}
-        {{- range $key, $val := .Values.network }}
+          {{- if .Values.network }}
+            {{- range $key, $val := .Values.network }}
             - name: {{ $key }}
               containerPort: {{ default $val.servicePort $val.containerPort }}
               protocol: {{ default "TCP" $val.protocol }}
-        {{- end }}
-        {{- end }}
-{{- if gt (len .Values.livenessProbe) 0 }}
-          livenessProbe:
-            {{- toYaml .Values.livenessProbe | nindent 12 }}
-{{- end }}
-{{- if gt (len .Values.readinessProbe) 0 }}
-          readinessProbe:
-            {{- toYaml .Values.readinessProbe | nindent 12 }}
-{{- end }}
-{{- if gt (len .Values.env) 0 }}
-          env:
-            {{- toYaml .Values.env | nindent 12 }}
-{{- end }}
-{{- if gt (len .Values.envFrom) 0 }}
-          envFrom:
-            {{- toYaml .Values.envFrom | nindent 12 }}
-{{- end }}
-{{- if or .Values.volumeMounts .Values.persistence.volumeMountPath }}
-          volumeMounts:
-{{- if .Values.persistence.volumeMountPath }}
+            {{- end }}
+          {{- end }}
+          livenessProbe: {{- if gt (len .Values.livenessProbe) 0 }}{{- toYaml .Values.livenessProbe | nindent 12 }}{{- end }}
+          readinessProbe: {{- if gt (len .Values.readinessProbe) 0 }}{{- toYaml .Values.readinessProbe | nindent 12 }}{{- end }}
+          env: {{- if gt (len .Values.env) 0 }}{{- toYaml .Values.env | nindent 12 }}{{- end }}
+          {{- range $ref := .Values.externalSecret.refs }}
+            {{- /* Cannot use default as it second value is false, default value is taken. https://github.com/Masterminds/sprig/issues/111#issuecomment-701368182 */}}
+            {{- if (ternary $ref.addAsEnv $.Values.externalSecret.addAsEnv (not (kindIs "invalid" $ref.addAsEnv ))) }}
+            - name: {{ $ref.secretKey }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "generic-chart.externalSecretName" $ }}
+                  key: {{ $ref.secretKey }}
+            {{- end }}
+          {{- end }}
+          envFrom: {{- if gt (len .Values.envFrom) 0 }}{{- toYaml .Values.envFrom | nindent 12 }}{{- end }}
+          volumeMounts: {{- if gt (len .Values.volumeMounts) 0 -}}{{- toYaml .Values.volumeMounts | nindent 12 }}{{- end }}
+          {{- range $ref := .Values.externalSecret.refs }}
+            {{- if default $ref.mountPath $.Values.externalSecret.mountPath }}
+            - name: {{ include "generic-chart.externalSecretName" $ }}
+              mountPath: {{ $ref.mountPath }}/{{ $ref.secretKey }}
+              subPath: {{ $ref.secretKey }}
+            {{- end }}
+          {{- end }}
+          {{- if .Values.persistence.volumeMountPath }}
             - mountPath: {{ .Values.persistence.volumeMountPath }}
               name: {{ default (include "generic-chart.name" .) .Values.persistence.name }}
-{{- end }}
-{{- if .Values.volumeMounts -}}
-          {{- toYaml .Values.volumeMounts | nindent 12 }}
-{{- end }}
-{{- end }}
-          resources:
-            {{- toYaml .Values.resources | nindent 12 }}
-      {{- with .Values.nodeSelector }}
-      nodeSelector:
-        {{- toYaml . | nindent 8 }}
+          {{- end }}
+          resources: {{- if gt (len .Values.resources) 0 -}}{{- toYaml .Values.resources | nindent 12 }}{{- end }}
+      nodeSelector: {{- if gt (len .Values.nodeSelector) 0 -}}{{- toYaml .Values.nodeSelector | nindent 8 }}{{- end }}
+      volumes: {{- if gt (len .Values.volumes) 0 }}{{- toYaml .Values.volumes | nindent 8 }}{{- end }}
+      {{- if $addExternalSecretAsVolume }}
+        - name: {{ include "generic-chart.externalSecretName" $ }}
+          secret:
+            secretName: {{ include "generic-chart.externalSecretName" $ }}
       {{- end }}
-{{- if or .Values.volumes .Values.persistence.enabled }}
-      volumes:
-  {{- if .Values.persistence.enabled }}
+      {{- if .Values.persistence.enabled }}
         - name: {{ default (include "generic-chart.name" .) .Values.persistence.name }}
           persistentVolumeClaim:
             claimName: {{ default (include "generic-chart.name" .) .Values.persistence.name }}
-  {{- end }}
-  {{- if .Values.volumes -}}
-    {{- toYaml .Values.volumes | nindent 8 }}
-  {{- end }}
-{{- end }}
-{{- if or .Values.affinity .Values.defaultAffinityRules.enabled }}
-      affinity:
-  {{- if .Values.defaultAffinityRules.enabled }}
+      {{- end }}
+      affinity: {{- if gt (len .Values.affinity) 0 }}{{- toYaml .Values.affinity | nindent 8 }}{{- end }}
+      {{- if .Values.defaultAffinityRules.enabled }}
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             - labelSelector:
@@ -152,12 +129,5 @@ spec:
                     values:
                       - {{ .Release.Name }}
               topologyKey: "kubernetes.io/hostname"
-{{- end }}
-{{- if .Values.affinity -}}
-{{- toYaml .Values.affinity | nindent 8 }}
-{{- end }}
-{{- end }}
-{{- with .Values.tolerations }}
-      tolerations:
-        {{- toYaml . | nindent 8 }}
-{{- end }}
+      {{- end }}
+      tolerations: {{- if gt (len .Values.tolerations) 0 }}{{- toYaml .Values.tolerations | nindent 8 }}{{- end }}
