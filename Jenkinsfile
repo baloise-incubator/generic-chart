@@ -3,7 +3,7 @@
 pipeline {
 
     agent {
-        label 'podman'
+        kubernetes(agents().helm().startContainers())
     }
 
     options {
@@ -28,7 +28,11 @@ pipeline {
                 }
             }
             steps {
-                helmPush tenant: 'shared', version: "3.0.0-${GIT_COMMIT}"
+                script {
+                    def version = "3.0.0-${GIT_COMMIT}"
+                    currentBuild.displayName = version
+                    helmPush tenant: 'shared', version: version
+                }
             }
         }
 
@@ -37,23 +41,12 @@ pipeline {
                 branch 'master'
             }
             steps {
-                helmPush tenant: 'shared'
+                script {
+                    def chart = readYaml file: 'Chart.yaml'
+                    currentBuild.displayName = chart.version
+                    helmPush tenant: 'shared'
+                }
             }
-        }
-    }
-
-    post {
-        success {
-            notifyBitBucket state: "SUCCESSFUL"
-        }
-
-        fixed {
-            mailTo status: "SUCCESS", actuator: true, recipients: [], logExtract: true
-        }
-
-        failure {
-            notifyBitBucket state: "FAILED"
-            mailTo status: "FAILURE", actuator: true, recipients: [], logExtract: true
         }
     }
 }
