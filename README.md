@@ -1,4 +1,5 @@
 # Generic Helm Chart
+[![Build Status](https://jenkins-config-caasi01.apps.caasi01.balgroupit.com/buildStatus/icon?job=charts%2Fgeneric-chart%2Fmaster)](https://jenkins-config-caasi01.apps.caasi01.balgroupit.com/job/charts/job/generic-chart/job/master/)
 
 This chart is a template for common Kubernetes resource manifests, which should cover most use cases. Please read through the list of possible configuration parameters. If you miss a specific feature, you can easily add it via a pull request. If you don't think you can do that, just create a JIRA issue in the Container Platform Team JIRA project (Key: COP)
 
