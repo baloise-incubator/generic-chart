@@ -1,7 +1,7 @@
 {{- if .Values.enableServiceMesh }}
 {{- $hostname := printf "%s-%s" (include "generic-chart.name" $) (include "generic-chart.host" $) }}
 {{- range $key, $val := .Values.network }}
-{{- if $val.enableIstioIngressGateway }}
+{{- if $val.ingress.enableIstioIngressGateway }}
 {{- if not ( kindIs "invalid" $val.ingress ) }}
 {{- if and (not $val.ingress.host) (not $.Values.ingress.clusterName) }}
 {{- fail "either .network.{}.ingress.host or .ingress.clusterName must be set" }}

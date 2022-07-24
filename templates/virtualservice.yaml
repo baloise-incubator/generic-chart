@@ -1,6 +1,6 @@
 {{- if .Values.enableServiceMesh }}
 {{- range $key, $val := .Values.network }}
-{{- if not ( $val.enableIstioIngressGateway ) }}
+{{- if not ( $val.ingress.enableIstioIngressGateway ) }}
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:

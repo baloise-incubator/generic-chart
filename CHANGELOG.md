@@ -1,3 +1,7 @@
+# 3.9.2 (2022-07-24)
+## Fix
+- Fix network.{}.ingress.enableIstioIngressGateway so that it matches the documentation
+
 # 3.9.1 (2022-07-24)
 ## Fix
 - Fix service creation for StatefulSets
