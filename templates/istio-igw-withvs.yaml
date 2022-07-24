@@ -13,7 +13,7 @@ apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: {{ printf "%s" (include "generic-chart.name" $) }}
-  namespace: { { include "generic-chart.namespace" . } }
+  namespace: {{ include "generic-chart.namespace" $ }}
   labels:
 {{ include "generic-chart.labels" $ | indent 4 }}
 spec:
@@ -32,6 +32,7 @@ apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: {{ printf "%s" (include "generic-chart.name" $ ) }}
+  namespace: {{ include "generic-chart.namespace" $ }}
   labels:
 {{ include "generic-chart.labels" $ | indent 4 }}
 spec:

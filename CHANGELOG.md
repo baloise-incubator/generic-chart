@@ -1,3 +1,7 @@
+# 3.9.3 (2022-07-24)
+## Fix
+- Fix namespace definition for VirtualService and Gateway
+
 # 3.9.2 (2022-07-24)
 ## Fix
 - Fix network.{}.ingress.enableIstioIngressGateway so that it matches the documentation
