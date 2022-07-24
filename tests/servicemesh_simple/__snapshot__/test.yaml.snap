@@ -1,0 +1,113 @@
+"":
+  1: |
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      labels:
+        app: generic-chart
+        helm.sh/chart: generic-chart-3.9.3
+        release: simple-app
+      name: generic-chart
+      namespace: namespace-test
+    spec:
+      replicas: 1
+      revisionHistoryLimit: 1
+      selector:
+        matchLabels:
+          app: generic-chart
+          release: simple-app
+      strategy:
+        type: RollingUpdate
+      template:
+        metadata:
+          annotations:
+            sidecar.istio.io/inject: "true"
+          labels:
+            app: generic-chart
+            release: simple-app
+        spec:
+          affinity:
+            podAntiAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+              - labelSelector:
+                  matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                    - generic-chart
+                  - key: release
+                    operator: In
+                    values:
+                    - simple-app
+                topologyKey: kubernetes.io/hostname
+          automountServiceAccountToken: true
+          containers:
+          - image: registry.example.tld/org/repo:v1
+            imagePullPolicy: IfNotPresent
+            name: generic-chart
+            ports:
+            - containerPort: 8080
+              name: http
+              protocol: TCP
+            resources: {}
+            securityContext: {}
+          securityContext: {}
+          serviceAccountName: generic-chart
+          topologySpreadConstraints:
+          - labelSelector:
+              matchLabels:
+                app: generic-chart
+                release: simple-app
+            maxSkew: 1
+            topologyKey: topology.kubernetes.io/any
+            whenUnsatisfiable: DoNotSchedule
+  2: |
+    apiVersion: v1
+    kind: Service
+    metadata:
+      labels:
+        app: generic-chart
+        helm.sh/chart: generic-chart-3.9.3
+        release: simple-app
+      name: generic-chart
+      namespace: namespace-test
+    spec:
+      ports:
+      - name: http
+        port: 8080
+        protocol: TCP
+        targetPort: http
+      selector:
+        app: generic-chart
+        release: simple-app
+      type: ClusterIP
+  3: |
+    apiVersion: v1
+    automountServiceAccountToken: false
+    kind: ServiceAccount
+    metadata:
+      labels:
+        app: generic-chart
+        helm.sh/chart: generic-chart-3.9.3
+        release: simple-app
+      name: generic-chart
+      namespace: namespace-test
+  4: |
+    apiVersion: networking.istio.io/v1beta1
+    kind: VirtualService
+    metadata:
+      labels:
+        app: generic-chart
+        helm.sh/chart: generic-chart-3.9.3
+        release: simple-app
+      name: generic-chart
+      namespace: namespace-test
+    spec:
+      hosts:
+      - generic-chart
+      http:
+      - route:
+        - destination:
+            host: generic-chart
+            port:
+              number: 8080

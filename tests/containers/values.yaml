@@ -1,0 +1,33 @@
+image:
+  repository: registry.example.tld/org/repo
+  tag: "v1"
+additionalContainers:
+  - name: "nginx-exporter"
+    image: quay.balgroupit.com/devops/nginx-prometheus-exporter:0.9.0
+    args:
+      - -nginx.retry-interval=10s
+    resources:
+      requests:
+        cpu: 10m
+        memory: 16Mi
+      limits:
+        cpu: 100m
+        memory: 32Mi
+    volumeMounts:
+      - name: special-config
+        mountPath: /tmp
+      - mountPath: /var/data
+        name: data
+    env:
+      - name: SCRAPE_URI
+        value: "http://127.0.0.1:8080/stub_status"
+initContainers:
+  - name: "demo-init-container"
+    image: quay.balgroupit.com/baloise-base-images/busybox:1.31.1
+    command: ["sh","-c", "echo test"]
+    volumeMounts:
+      - name: special-config
+        mountPath: /tmp
+    env:
+      - name: INIT_DEMO_VARIABLE
+        value: "Init Demo Variable"

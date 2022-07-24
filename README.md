@@ -7,7 +7,7 @@ This chart is a template for common Kubernetes resource manifests, which should 
 In [CHANGELOG.md](./CHANGELOG.md) are all changes since version `1.0.0` tracked with the corresponding **migration guides**.
 
 ## Examples
-You can find an example setup using the generic-chart in the [examples directory](./examples/). The [values-example.yaml](./values-example.yaml) contains some extended configuration examples.
+You can find an example setup using the generic-chart in the [examples directory](./examples/). If you search of a more specific use-case, have a look at the test values.yaml in the [tests/](./tests) directory.
 
 ## Configuration
 
@@ -90,3 +90,17 @@ You can find an example setup using the generic-chart in the [examples directory
 
 ## Contributions
 If you contribute new featuers or fix a bug, please update the `.version` in the `Chart.yaml` according to [SemVer](https://semver.org/) and update the documentation.
+
+## Testing
+To run tests
+
+```bash
+make test
+```
+
+To update the snapshot files
+```bash
+make test-update
+```
+
+If you want to add your own test case, simply copy [tests/simple](./tests/simple) in a new directory and adjust the test.yaml and values.yaml accordingly.

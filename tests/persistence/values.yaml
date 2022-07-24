@@ -1,0 +1,11 @@
+replicaCount: 2
+image:
+  repository: registry.example.tld/org/repo
+  tag: "v1"
+persistence:
+  enabled: true
+  name: data
+  storageClass:
+  accessModes: ReadWriteMany
+  size: 100Mi
+  volumeMountPath: /app/data
