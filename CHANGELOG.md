@@ -1,3 +1,7 @@
+# 3.9.1 (2022-07-24)
+## Fix
+- Fix service creation for StatefulSets
+
 # 3.9.0 (2022-07-22)
 ## Feature
 - Add support for StatefulSets, including Service per Pod and Route per Service

@@ -1,4 +1,4 @@
-{{ if and (and .Values.network .Values.deployment.stateful.enabled) .Values.deployment.servicePerPod }}
+{{ if and (and .Values.network .Values.deployment.stateful.enabled) .Values.deployment.stateful.servicePerPod }}
 {{- range $i, $e := until (.Values.replicaCount | int) }}
 ---
 apiVersion: v1
