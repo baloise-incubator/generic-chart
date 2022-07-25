@@ -18,7 +18,6 @@ Common labels
 */}}
 {{- define "generic-chart.labels" -}}
 app: {{ include "generic-chart.name" . }}
-helm.sh/chart: {{ include "generic-chart.chart" . }}
 release: {{ .Release.Name }}
 {{- if .Chart.AppVersion }}
 version: {{ .Chart.AppVersion | quote }}

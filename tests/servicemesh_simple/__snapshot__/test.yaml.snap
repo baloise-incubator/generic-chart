@@ -5,7 +5,6 @@
     metadata:
       labels:
         app: generic-chart
-        helm.sh/chart: generic-chart-3.9.3
         release: simple-app
       name: generic-chart
       namespace: namespace-test
@@ -67,7 +66,6 @@
     metadata:
       labels:
         app: generic-chart
-        helm.sh/chart: generic-chart-3.9.3
         release: simple-app
       name: generic-chart
       namespace: namespace-test
@@ -88,7 +86,6 @@
     metadata:
       labels:
         app: generic-chart
-        helm.sh/chart: generic-chart-3.9.3
         release: simple-app
       name: generic-chart
       namespace: namespace-test
@@ -98,7 +95,6 @@
     metadata:
       labels:
         app: generic-chart
-        helm.sh/chart: generic-chart-3.9.3
         release: simple-app
       name: generic-chart
       namespace: namespace-test
