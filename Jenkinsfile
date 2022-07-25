@@ -25,6 +25,10 @@ pipeline {
             steps {
                 container("helm") {
                     sh 'helm unittest -o test-results.xml -t junit -3 $(find tests/**/test.yaml | sed \'s:tests/:-f tests/:g\') .'
+                }
+            }
+            post {
+                always {
                     junit 'test-results.xml'
                 }
             }
