@@ -1,0 +1,196 @@
+"":
+  1: |
+    apiVersion: apps/v1
+    kind: StatefulSet
+    metadata:
+      labels:
+        app: generic-chart
+        release: simple-app
+      name: generic-chart
+      namespace: namespace-test
+    spec:
+      podManagementPolicy: OrderedReady
+      replicas: 2
+      revisionHistoryLimit: 1
+      selector:
+        matchLabels:
+          app: generic-chart
+          release: simple-app
+      serviceName: generic-chart
+      template:
+        metadata:
+          labels:
+            app: generic-chart
+            release: simple-app
+        spec:
+          affinity:
+            podAntiAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+              - labelSelector:
+                  matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                    - generic-chart
+                  - key: release
+                    operator: In
+                    values:
+                    - simple-app
+                topologyKey: kubernetes.io/hostname
+          containers:
+          - image: registry.example.tld/org/repo:v1
+            imagePullPolicy: IfNotPresent
+            name: generic-chart
+            ports:
+            - containerPort: 8080
+              name: http
+              protocol: TCP
+            resources: {}
+            securityContext: {}
+          securityContext: {}
+          serviceAccountName: generic-chart
+          topologySpreadConstraints:
+          - labelSelector:
+              matchLabels:
+                app: generic-chart
+                release: simple-app
+            maxSkew: 1
+            topologyKey: topology.kubernetes.io/any
+            whenUnsatisfiable: DoNotSchedule
+      updateStrategy:
+        type: RollingUpdate
+  2: |
+    apiVersion: route.openshift.io/v1
+    kind: Route
+    metadata:
+      labels:
+        app: generic-chart
+        release: simple-app
+      name: generic-chart-http
+      namespace: namespace-test
+    spec:
+      host: example.example.tld
+      path: /
+      port:
+        targetPort: http
+      tls:
+        insecureEdgeTerminationPolicy: Redirect
+        termination: edge
+      to:
+        kind: Service
+        name: generic-chart
+        weight: 100
+      wildcardPolicy: None
+  3: |
+    apiVersion: v1
+    kind: Service
+    metadata:
+      labels:
+        app: generic-chart
+        release: simple-app
+      name: generic-chart
+      namespace: namespace-test
+    spec:
+      ports:
+      - name: http
+        port: 8080
+        protocol: TCP
+        targetPort: http
+      selector:
+        app: generic-chart
+        release: simple-app
+      type: ClusterIP
+  4: |
+    apiVersion: v1
+    automountServiceAccountToken: false
+    kind: ServiceAccount
+    metadata:
+      labels:
+        app: generic-chart
+        release: simple-app
+      name: generic-chart
+      namespace: namespace-test
+  5: |
+    apiVersion: route.openshift.io/v1
+    kind: Route
+    metadata:
+      labels:
+        app: generic-chart
+        release: simple-app
+      name: generic-chart-http-0
+      namespace: namespace-test
+    spec:
+      host: generic-chart-http-0-example.example.tld
+      path: /
+      port:
+        targetPort: http
+      tls:
+        insecureEdgeTerminationPolicy: Redirect
+        termination: edge
+      to:
+        kind: Service
+        name: generic-chart-0
+        weight: 100
+      wildcardPolicy: None
+  6: |
+    apiVersion: route.openshift.io/v1
+    kind: Route
+    metadata:
+      labels:
+        app: generic-chart
+        release: simple-app
+      name: generic-chart-http-1
+      namespace: namespace-test
+    spec:
+      host: generic-chart-http-1-example.example.tld
+      path: /
+      port:
+        targetPort: http
+      tls:
+        insecureEdgeTerminationPolicy: Redirect
+        termination: edge
+      to:
+        kind: Service
+        name: generic-chart-1
+        weight: 100
+      wildcardPolicy: None
+  7: |
+    apiVersion: v1
+    kind: Service
+    metadata:
+      labels:
+        app: generic-chart
+        release: simple-app
+      name: generic-chart-0
+      namespace: namespace-test
+    spec:
+      ports:
+      - name: http
+        port: 8080
+        protocol: TCP
+        targetPort: http
+      selector:
+        app: generic-chart
+        release: simple-app
+        statefulset.kubernetes.io/pod-name: generic-chart-0
+      type: ClusterIP
+  8: |
+    apiVersion: v1
+    kind: Service
+    metadata:
+      labels:
+        app: generic-chart
+        release: simple-app
+      name: generic-chart-1
+      namespace: namespace-test
+    spec:
+      ports:
+      - name: http
+        port: 8080
+        protocol: TCP
+        targetPort: http
+      selector:
+        app: generic-chart
+        release: simple-app
+        statefulset.kubernetes.io/pod-name: generic-chart-1
+      type: ClusterIP

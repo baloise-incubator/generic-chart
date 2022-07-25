@@ -1,0 +1,22 @@
+replicaCount: 2
+image:
+  repository: registry.example.tld/org/repo
+  tag: "v1"
+network:
+  http:
+    ingress:
+      host: example.example.tld
+  metrics:
+    servicePort: 9000
+    serviceMonitor:
+      interval: 60s
+      path: /actuator/metrics
+      scheme: http
+      extraConfig:
+        basicAuth:
+          password:
+            name: internal
+            key: password
+          username:
+            name: internal
+            key: username

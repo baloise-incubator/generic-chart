@@ -1,0 +1,8 @@
+enableServiceMesh: true
+image:
+  repository: registry.example.tld/org/repo
+  tag: "v1"
+network:
+  http:
+    ingress:
+      host: example.example.tld
