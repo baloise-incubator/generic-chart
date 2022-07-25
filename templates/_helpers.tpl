@@ -25,6 +25,13 @@ version: {{ .Chart.AppVersion | quote }}
 {{- end -}}
 
 {{/*
+Define external secret name.
+*/}}
+{{- define "generic-chart.externalSecretName" -}}
+    {{- default ( include "generic-chart.name" . ) .Values.externalSecret.overrideName -}}
+{{- end -}}
+
+{{/*
 Create default route host depending on `.Chart.Name`, `.Release.Name`
 and `.Values.ingress.clusterName` ("caasd01" or "caast01" or "caasp01")
 */}}

@@ -1,29 +1,25 @@
 {{ if .Values.serviceLoadBalancer }}
-{{- if not (.Values.serviceLoadBalancerIP) }}
-{{- fail "If .Values.serviceLoadBalancer is not null then .Values.serviceLoadBalancerIP must be set" }}
-{{- end -}}
+  {{- if not (.Values.serviceLoadBalancerIP) }}
+    {{- fail "If .Values.serviceLoadBalancer is not null then .Values.serviceLoadBalancerIP must be set" }}
+  {{- end -}}
 apiVersion: v1
 kind: Service
 metadata:
   name: {{ include "generic-chart.name" . }}-lb
   namespace: {{ template "generic-chart.namespace" $ }}
-  labels:
-{{ include "generic-chart.labels" . | indent 4 }}
-{{- if gt (len .Values.serviceLoadBalancerAnnotations) 0 }}
-  annotations:
-{{- toYaml .Values.serviceLoadBalancerAnnotations | nindent 4 }}
-{{- end }}
+  labels: {{ include "generic-chart.labels" . | nindent 4 }}
+  annotations: {{- if gt (len .Values.serviceLoadBalancerAnnotations) 0 }}{{- toYaml .Values.serviceLoadBalancerAnnotations | nindent 4 }}{{- end }}
 spec:
   type: LoadBalancer
   loadBalancerIP: {{ .Values.serviceLoadBalancerIP }}
   ports:
   {{- range $key, $val := .Values.serviceLoadBalancer }}
-  {{- if $val.servicePort}}
+    {{- if $val.servicePort}}
   - name: {{ $key }}    
     port: {{ $val.servicePort }}
     protocol: {{ default "TCP" $val.protocol }}
     targetPort: {{ default $key $val.targetPort }}
-  {{- end }}
+    {{- end }}
   {{- end }}
   selector:
     app: {{ include "generic-chart.name" . }}

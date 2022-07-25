@@ -1,0 +1,17 @@
+image:
+  repository: registry.example.tld/org/repo
+  tag: "v1"
+externalSecret:
+  addAsEnv: false
+  mountPath:
+  overrideName: mysecret
+  refs:
+    - vaultPath: secrets/apps/exampleApplication/T/exampleSecret
+      vaultKey: key
+      secretKey: secretKey
+      addAsEnv: false
+      mountPath: /file/path
+    - vaultPath: secrets/apps/exampleApplication/T/exampleSecret
+      vaultKey: key
+      secretKey: secondSecretKey
+      addAsEnv: true
