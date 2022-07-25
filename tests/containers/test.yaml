@@ -1,5 +1,6 @@
 templates:
   - deployment.yaml
+#  - external-secret.yaml
 #  - ingress-route.yaml
 #  - istio-igw-withvs.yaml
 #  - pvc.yaml

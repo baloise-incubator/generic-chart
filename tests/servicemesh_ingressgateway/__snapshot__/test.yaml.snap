@@ -41,17 +41,28 @@
                 topologyKey: kubernetes.io/hostname
           automountServiceAccountToken: true
           containers:
-          - image: registry.example.tld/org/repo:v1
+          - args: null
+            command: null
+            env: null
+            envFrom: null
+            image: registry.example.tld/org/repo:v1
             imagePullPolicy: IfNotPresent
+            livenessProbe: null
             name: generic-chart
             ports:
             - containerPort: 8080
               name: http
               protocol: TCP
-            resources: {}
-            securityContext: {}
-          securityContext: {}
+            readinessProbe: null
+            resources: null
+            securityContext: null
+            volumeMounts: null
+          imagePullSecrets: null
+          initContainers: null
+          nodeSelector: null
+          securityContext: null
           serviceAccountName: generic-chart
+          tolerations: null
           topologySpreadConstraints:
           - labelSelector:
               matchLabels:
@@ -60,6 +71,7 @@
             maxSkew: 1
             topologyKey: topology.kubernetes.io/any
             whenUnsatisfiable: DoNotSchedule
+          volumes: null
   2: |
     apiVersion: networking.istio.io/v1beta1
     kind: VirtualService
@@ -103,6 +115,7 @@
     apiVersion: v1
     kind: Service
     metadata:
+      annotations: null
       labels:
         app: generic-chart
         release: simple-app
@@ -123,6 +136,7 @@
     automountServiceAccountToken: false
     kind: ServiceAccount
     metadata:
+      annotations: null
       labels:
         app: generic-chart
         release: simple-app
