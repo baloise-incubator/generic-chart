@@ -1,3 +1,7 @@
+# 3.9.4 (2022-07-24)
+## Tests
+- Added snapshot tests
+
 # 3.9.3 (2022-07-24)
 ## Fix
 - Fix namespace definition for VirtualService and Gateway
