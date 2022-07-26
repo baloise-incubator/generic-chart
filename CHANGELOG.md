@@ -1,3 +1,7 @@
+# 3.10.1 (2022-07-26)
+## Feature
+- Fix if no secretKey is defined
+
 # 3.10.0 (2022-07-25)
 ## Feature
 - Add support for ExternalSecrets with Vault (referencing Vault secrets, mount them as env and/or as file)

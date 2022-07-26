@@ -42,10 +42,10 @@
           - args: null
             command: null
             env:
-            - name: null
+            - name: key
               valueFrom:
                 secretKeyRef:
-                  key: null
+                  key: key
                   name: generic-chart
             envFrom: null
             image: registry.example.tld/org/repo:v1
