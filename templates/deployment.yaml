@@ -81,11 +81,11 @@ spec:
           {{- range $ref := .Values.externalSecret.refs }}
             {{- /* Cannot use default as it second value is false, default value is taken. https://github.com/Masterminds/sprig/issues/111#issuecomment-701368182 */}}
             {{- if (ternary $ref.addAsEnv $.Values.externalSecret.addAsEnv (not (kindIs "invalid" $ref.addAsEnv ))) }}
-            - name: {{ $ref.secretKey }}
+            - name: {{ default $ref.vaultKey $ref.secretKey }}
               valueFrom:
                 secretKeyRef:
                   name: {{ include "generic-chart.externalSecretName" $ }}
-                  key: {{ $ref.secretKey }}
+                  key: {{ default $ref.vaultKey $ref.secretKey }}
             {{- end }}
           {{- end }}
           envFrom: {{- if gt (len .Values.envFrom) 0 }}{{- toYaml .Values.envFrom | nindent 12 }}{{- end }}
