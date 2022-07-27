@@ -1,3 +1,7 @@
+# 3.10.3 (2022-07-27)
+## Fix
+- Fix externalSecret volumeMounts if no secretKey is defined
+
 # 3.10.2 (2022-07-26)
 ## Fix
 - Prevent ExternalSecret creation if no externalSecrets.refs are defined

@@ -93,8 +93,8 @@ spec:
           {{- range $ref := .Values.externalSecret.refs }}
             {{- if default $ref.mountPath $.Values.externalSecret.mountPath }}
             - name: {{ include "generic-chart.externalSecretName" $ }}
-              mountPath: {{ $ref.mountPath }}/{{ $ref.secretKey }}
-              subPath: {{ $ref.secretKey }}
+              mountPath: {{ $ref.mountPath }}/{{ default $ref.vaultKey $ref.secretKey }}
+              subPath: {{ default $ref.vaultKey $ref.secretKey }}
             {{- end }}
           {{- end }}
           {{- if .Values.persistence.volumeMountPath }}
