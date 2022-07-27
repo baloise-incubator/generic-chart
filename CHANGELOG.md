@@ -1,5 +1,9 @@
+# 3.10.2 (2022-07-26)
+## Fix
+- Prevent ExternalSecret creation if no externalSecrets.refs are defined
+
 # 3.10.1 (2022-07-26)
-## Feature
+## Fix
 - Fix if no secretKey is defined
 
 # 3.10.0 (2022-07-25)
