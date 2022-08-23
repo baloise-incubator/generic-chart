@@ -4,5 +4,5 @@ version: 1.0.0
 dependencies:
   - name: generic-chart
     version: 2.1.0
-    repository: https://registry.baloise.dev/chartrepo/library
+    repository: https://luechtdiode.github.io/generic-chart/
     alias: app
