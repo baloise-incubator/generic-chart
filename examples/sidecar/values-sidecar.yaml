@@ -1,13 +1,25 @@
 replicaCount: 2
 revisionHistoryLimit: 1
 image:
-  repository: registry.baloise.dev/example/nginx-sample
-  tag: latest
+  repository: quay.balgroupit.com/baloise-base-images/nginx
+  tag: 1.19-alpine
   pullPolicy: IfNotPresent
 imagePullSecrets: []
 nameOverride: ""
 podSecurityContext: {}
 securityContext: {}
+
+additionalContainers:
+  - name: "nginx-exporter"
+    image: quay.balgroupit.com/devops/nginx-prometheus-exporter:0.9.0
+    args:
+      - -nginx.retry-interval=10s
+    volumeMounts:
+      - name: special-config
+        mountPath: /tmp
+    env:
+      - name: SCRAPE_URI
+        value: "http://127.0.0.1:8080/stub_status"
 initContainers:
   - name: "demo-init-container"
     image: quay.balgroupit.com/baloise-base-images/busybox:1.31.1
@@ -23,44 +35,45 @@ serviceAccount:
   name:
   automountServiceAccountToken: true
 network:
-  api:
+  nginx-exporter:
+    servicePort: 9114
+    ingress:
+      host: nginx-exporter.chapp-test.os1.balgroupit.com
+  http:
     servicePort: 8080
     ingress:
-      host: api.example.tld
-  mgmt:
-    servicePort: 9090
-    ingress:
-      host: app.example.tld
-      annotations:
-        haproxy.router.openshift.io/timeout: 5m
+      host: http.chapp-test.os2.balgroupit.com
 service:
   type: ClusterIP
-deployment:
-  strategy:
-    type: Recreate
 env:
   - name: DEMO_VARIABLE
     value: "Demo Variable"
 envFrom: []
 persistence:
   name: data
-  storageClass: custom-storage-class
+  storageClass: trident-nfs
   enabled: true
   accessModes: ReadWriteMany
   size: 100Mi
   volumeMountPath: /app/data
 volumes:
-  - name: config-volume
+  - name: special-config
     configMap:
       name: special-config
+  - name: nginx-conf
+    configMap:
+      name: nginx-conf
 volumeMounts:
   - mountPath: /usr/local/sometool
     name: special-config
+  - mountPath: /etc/nginx/conf.d/default.conf
+    name: nginx-conf
+    subPath: default.conf
   - mountPath: /var/data
     name: data
 readinessProbe:
   httpGet:
-    path: /
+    path: /stub_status
     port: 8080
   initialDelaySeconds: 5
   timeoutSeconds: 1
@@ -76,13 +89,4 @@ nodeSelector: {}
 tolerations: []
 affinity: {}
 defaultAffinityRules: {}
-annotations:
-  sidecar.istio.io/inject: "true"
-labels:
-  maistra.io/expose-route: 'true'
-command:
-  - /app
-  - --debug
-args:
-  - --port=123
-  - --path=/a/b/c
+annotations: {}
