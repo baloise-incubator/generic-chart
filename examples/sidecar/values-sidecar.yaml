@@ -1,7 +1,7 @@
 replicaCount: 2
 revisionHistoryLimit: 1
 image:
-  repository: bitnami/nginx
+  repository: nginx
   tag: 1.19-alpine
   pullPolicy: IfNotPresent
 imagePullSecrets: []
