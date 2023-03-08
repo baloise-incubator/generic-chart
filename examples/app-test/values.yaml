@@ -1,7 +1,7 @@
 app:
   replicaCount: 2
   image:
-    repository: bitnami/nginx:1.19.1
+    repository: nginx:1.19.1
     tag: latest
   network:
     http:
