@@ -1,7 +1,7 @@
 replicaCount: 2
 revisionHistoryLimit: 1
 image:
-  repository: registry.baloise.dev/example/nginx-sample
+  repository: registry.example.tld/example/nginx-sample # Artifact registry url
   tag: latest
   pullPolicy: IfNotPresent
 imagePullSecrets: []
@@ -10,7 +10,7 @@ podSecurityContext: {}
 securityContext: {}
 initContainers:
   - name: "demo-init-container"
-    image: quay.balgroupit.com/baloise-base-images/busybox:1.31.1
+    image: busybox:1.31.1
     command: ["sh","-c", "echo test"]
     volumeMounts:
       - name: special-config
