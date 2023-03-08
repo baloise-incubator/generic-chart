@@ -1,7 +1,7 @@
 replicaCount: 2
 revisionHistoryLimit: 1
 image:
-  repository: quay.balgroupit.com/baloise-base-images/nginx
+  repository: nginx
   tag: 1.19-alpine
   pullPolicy: IfNotPresent
 imagePullSecrets: []
@@ -11,7 +11,7 @@ securityContext: {}
 
 additionalContainers:
   - name: "nginx-exporter"
-    image: quay.balgroupit.com/devops/nginx-prometheus-exporter:0.9.0
+    image: nginx/nginx-prometheus-exporter:0.9.0
     args:
       - -nginx.retry-interval=10s
     volumeMounts:
@@ -22,7 +22,7 @@ additionalContainers:
         value: "http://127.0.0.1:8080/stub_status"
 initContainers:
   - name: "demo-init-container"
-    image: quay.balgroupit.com/baloise-base-images/busybox:1.31.1
+    image: busybox:1.31.1
     command: ["sh","-c", "echo test"]
     volumeMounts:
       - name: special-config
@@ -38,11 +38,11 @@ network:
   nginx-exporter:
     servicePort: 9114
     ingress:
-      host: nginx-exporter.chapp-test.os1.balgroupit.com
+      host: nginx-exporter.chapp-test.example.tld
   http:
     servicePort: 8080
     ingress:
-      host: http.chapp-test.os2.balgroupit.com
+      host: http.chapp-test.example.tld
 service:
   type: ClusterIP
 env:
