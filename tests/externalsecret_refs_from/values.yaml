@@ -1,0 +1,9 @@
+image:
+  repository: registry.example.tld/org/repo
+  tag: "v1"
+ingress:
+  controller: Route
+externalSecret:
+  refsFrom:
+    - vaultPath: secrets/apps/exampleApplication/T/firstExampleSecret
+    - vaultPath: secrets/apps/exampleApplication/T/secodExampleSecret

@@ -1,0 +1,15 @@
+replicaCount: 2
+image:
+  repository: registry.example.tld/org/repo
+  tag: "v1"
+ingress:
+  controller: Route
+network:
+  http:
+    ingress:
+      host: example.example.tld
+serviceLoadBalancer:
+  api:
+    servicePort: 6443
+serviceLoadBalancerIP: 10.1.1.1
+serviceLoadBalancerAnnotations: {}

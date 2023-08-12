@@ -1,0 +1,70 @@
+replicaCount: 2
+annotations:
+  env: test
+  second: annotation
+image:
+  repository: registry.example.tld/org/repo
+  tag: "v1"
+ingress:
+  controller: Route
+env:
+  - name: "LOG_LEVEL"
+    value: "DEBUG"
+envFrom:
+  - configMapRef:
+    name: app-config
+  - secretRef:
+    name: app-secret
+volumes:
+  - name: cache
+    emptyDir: {}
+  - name: persistent
+    persistentVolumeClaim:
+      claimName: app-pvc
+  - name: config
+    configMap:
+      name: app-config
+  - name: secret
+    secret:
+      secretName: app-secret
+volumeMounts:
+  - name: cache
+    mountPath: /cache
+  - name: persistent
+    mountPath: /persistent
+  - name: config
+    mountPath: /config
+  - name: secret
+    mountPath: /secret
+network:
+  http:
+    ingress:
+      host: example.example.tld
+  metrics:
+    servicePort: 9000
+    serviceMonitor: {}
+readinessProbe:
+  httpGet:
+    path: /health/readiness
+    port: 8080
+  initialDelaySeconds: 5
+  timeoutSeconds: 1
+livenessProbe:
+  httpGet:
+    path: /health/liveness
+    port: 8080
+  initialDelaySeconds: 180
+  timeoutSeconds: 10
+startupProbe:
+  httpGet:
+    path: /health/startup
+    port: 8080
+  failureThreshold: 120
+  periodSeconds: 10
+resources:
+  requests:
+    cpu: 50m
+    memory: 256Mi
+  limits:
+    cpu: 1
+    memory: 512Mi

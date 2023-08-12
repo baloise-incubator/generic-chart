@@ -1,13 +1,15 @@
 app:
   replicaCount: 2
+  revisionHistoryLimit: 1
   image:
-    repository: nginx:1.19.1
+    repository: example/nginx-sample
     tag: latest
+    pullPolicy: IfNotPresent
   network:
     http:
       servicePort: 8080
       ingress:
-        host: demo.apps.example.tld
+        host: example.org
   readinessProbe:
     httpGet:
       path: /

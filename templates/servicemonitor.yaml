@@ -1,0 +1,28 @@
+{{- range $key,$val := .Values.network }}
+  {{ if not (kindIs "invalid" $val.serviceMonitor) }}
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ printf "%s-%s" (include "generic-chart.name" $ ) $key }}
+  namespace: {{ template "generic-chart.namespace" $ }}
+  labels: {{ include "generic-chart.labels" $ | nindent 4 }}
+spec:
+  endpoints:
+    - interval: {{ default "30s" $val.serviceMonitor.interval }}
+      port: {{ $key }}
+      path: {{ default "/metrics" $val.serviceMonitor.path }}
+      scheme: {{ default "http" $val.serviceMonitor.scheme }}
+      {{- if eq (default "http" $val.serviceMonitor.scheme) "https" }}
+      tlsConfig:
+        caFile: /var/run/secrets/kubernetes.io/serviceaccount/service-ca.crt
+        serverName: {{ include "generic-chart.name" $ }}.{{ template "generic-chart.namespace" $ }}.svc
+      {{- end }}
+      {{- if $val.serviceMonitor.extraConfig }}
+        {{- toYaml $val.serviceMonitor.extraConfig | nindent 6 }}
+      {{- end }}
+  selector:
+    matchLabels:
+      app: {{ include "generic-chart.name" $ }}
+  {{- end }}
+{{- end }}

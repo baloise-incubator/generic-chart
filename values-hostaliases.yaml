@@ -1,0 +1,83 @@
+replicaCount: 1
+revisionHistoryLimit: 1
+zone: any
+image:
+#  repository: example/nginx-sample
+#  tag: latest
+  pullPolicy: IfNotPresent
+imagePullSecrets: []
+nameOverride: ""
+deployment:
+  stateful:
+    enabled: false
+    podManagementPolicy: OrderedReady
+    servicePerPod: true
+    routePerService: true
+  strategy:
+    type: RollingUpdate
+enableServiceMesh: false
+enableReloader: false
+serviceAccount:
+  create: true
+  name:
+  automountServiceAccountToken: false
+  annotations: {}
+network:
+  http:
+    servicePort: 8080
+    enableIstioIngressGateway: false
+#    serviceMonitor: {}
+#    ingress:
+#      host: example.org
+#      addAsEnv: true
+#      envNameOverride:
+service:
+  type: ClusterIP
+  annotations: {}
+ingress:
+  controller: Route
+externalSecret:
+  addAsEnv: true
+  mountPath:
+  overrideName:
+  refs: []
+  refsFrom: []
+env: []
+envFrom: []
+persistence:
+  enabled: false
+  accessModes: ReadWriteMany
+  storageClass:
+  annotations: {}
+#  size: 1Gi
+#  volumeMount: /var/app/data/
+volumes: []
+volumeMounts: []
+readinessProbe: {}
+#  httpGet:
+#    path: /
+#    port: http
+livenessProbe: {}
+#  httpGet:
+#    path: /
+#    port: http
+startupProbe: {}
+#  httpGet:
+#    path: /
+#    port: http
+resources: {}
+podSecurityContext: {}
+hostAliases:
+   - ip: 127.0.0.1
+     hostnames:
+     - donotuseme.balgroupit.com
+securityContext: {}
+nodeSelector: {}
+tolerations: []
+affinity: {}
+defaultAffinityRules:
+  enabled: true
+annotations: {}
+command: []
+args: []
+initContainers: []

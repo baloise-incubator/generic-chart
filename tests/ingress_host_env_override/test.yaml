@@ -1,0 +1,19 @@
+templates:
+  - deployment.yaml
+#  - external-secret.yaml
+  - ingress.yaml
+#  - pvc.yaml
+  - service.yaml
+  - serviceaccount.yaml
+#  - serviceloadbalancer.yaml
+#  - servicemonitor.yaml
+#  - statefulset-ingress.yaml
+#  - statefulset-service.yaml
+tests:
+  - release:
+      name: simple-app
+      namespace: namespace-test
+    values:
+      - values.yaml
+    asserts:
+      - matchSnapshot: {}

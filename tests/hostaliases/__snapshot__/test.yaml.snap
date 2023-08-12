@@ -1,0 +1,128 @@
+"":
+  1: |
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      labels:
+        app: generic-chart
+        release: simple-app
+      name: generic-chart
+      namespace: namespace-test
+    spec:
+      replicas: 2
+      revisionHistoryLimit: 1
+      selector:
+        matchLabels:
+          app: generic-chart
+          release: simple-app
+      strategy:
+        type: RollingUpdate
+      template:
+        metadata:
+          annotations:
+            env: test
+            second: annotation
+          labels:
+            app: generic-chart
+            release: simple-app
+        spec:
+          affinity:
+            podAntiAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                - labelSelector:
+                    matchExpressions:
+                      - key: app
+                        operator: In
+                        values:
+                          - generic-chart
+                      - key: release
+                        operator: In
+                        values:
+                          - simple-app
+                  topologyKey: kubernetes.io/hostname
+          containers:
+            - args: null
+              command: null
+              env:
+                - name: LOG_LEVEL
+                  value: DEBUG
+              envFrom:
+                - configMapRef: null
+                  name: app-config
+                - name: app-secret
+                  secretRef: null
+              image: registry.example.tld/org/repo:v1
+              imagePullPolicy: IfNotPresent
+              livenessProbe:
+                httpGet:
+                  path: /health/liveness
+                  port: 8080
+                initialDelaySeconds: 180
+                timeoutSeconds: 10
+              name: generic-chart
+              ports:
+                - containerPort: 8080
+                  name: http
+                  protocol: TCP
+                - containerPort: 9000
+                  name: metrics
+                  protocol: TCP
+              readinessProbe:
+                httpGet:
+                  path: /health/readiness
+                  port: 8080
+                initialDelaySeconds: 5
+                timeoutSeconds: 1
+              resources:
+                limits:
+                  cpu: 1
+                  memory: 512Mi
+                requests:
+                  cpu: 50m
+                  memory: 256Mi
+              securityContext: null
+              startupProbe:
+                failureThreshold: 120
+                httpGet:
+                  path: /health/startup
+                  port: 8080
+                periodSeconds: 10
+              volumeMounts:
+                - mountPath: /cache
+                  name: cache
+                - mountPath: /persistent
+                  name: persistent
+                - mountPath: /config
+                  name: config
+                - mountPath: /secret
+                  name: secret
+          hostAliases:
+            - hostnames:
+                - dummy.dummy.com
+              ip: 127.0.0.1
+          imagePullSecrets: null
+          initContainers: null
+          nodeSelector: null
+          securityContext: null
+          serviceAccountName: generic-chart
+          tolerations: null
+          topologySpreadConstraints:
+            - labelSelector:
+                matchLabels:
+                  app: generic-chart
+                  release: simple-app
+              maxSkew: 1
+              topologyKey: null
+              whenUnsatisfiable: DoNotSchedule
+          volumes:
+            - emptyDir: {}
+              name: cache
+            - name: persistent
+              persistentVolumeClaim:
+                claimName: app-pvc
+            - configMap:
+                name: app-config
+              name: config
+            - name: secret
+              secret:
+                secretName: app-secret

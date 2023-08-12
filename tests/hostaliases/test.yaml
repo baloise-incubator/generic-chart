@@ -1,0 +1,21 @@
+templates:
+  - deployment.yaml
+#  - external-secret.yaml
+#  - ingress.yaml
+#  - istio-igw-withvs.yaml
+#  - pvc.yaml
+#  - service.yaml
+#  - serviceaccount.yaml
+#  - serviceloadbalancer.yaml
+#  - servicemonitor.yaml
+#  - statefulset-ingress.yaml
+#  - statefulset-service.yaml
+#  - virtualservice.yaml
+tests:
+  - release:
+      name: simple-app
+      namespace: namespace-test
+    values:
+      - values.yaml
+    asserts:
+      - matchSnapshot: {}

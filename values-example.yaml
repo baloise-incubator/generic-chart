@@ -1,7 +1,7 @@
 replicaCount: 2
 revisionHistoryLimit: 1
 image:
-  repository: registry.example.tld/example/nginx-sample # Artifact registry url
+  repository: example/nginx-sample
   tag: latest
   pullPolicy: IfNotPresent
 imagePullSecrets: []
@@ -26,31 +26,28 @@ network:
   api:
     servicePort: 8080
     ingress:
-      host: api.example.tld
+      host: example-url.tld
   mgmt:
     servicePort: 9090
     ingress:
-      host: app.example.tld
+      host: abcz-chapp-balgroupit.com
       annotations:
         haproxy.router.openshift.io/timeout: 5m
 service:
   type: ClusterIP
-deployment:
-  strategy:
-    type: Recreate
 env:
   - name: DEMO_VARIABLE
     value: "Demo Variable"
 envFrom: []
 persistence:
   name: data
-  storageClass: custom-storage-class
+  storageClass:
   enabled: true
   accessModes: ReadWriteMany
   size: 100Mi
   volumeMountPath: /app/data
 volumes:
-  - name: config-volume
+  - name: special-config
     configMap:
       name: special-config
 volumeMounts:
@@ -76,13 +73,5 @@ nodeSelector: {}
 tolerations: []
 affinity: {}
 defaultAffinityRules: {}
-annotations:
-  sidecar.istio.io/inject: "true"
-labels:
-  maistra.io/expose-route: 'true'
-command:
-  - /app
-  - --debug
-args:
-  - --port=123
-  - --path=/a/b/c
+annotations: {}
+enableReloader: true

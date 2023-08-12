@@ -1,92 +1,96 @@
-replicaCount: 2
-revisionHistoryLimit: 1
-image:
-  repository: nginx
-  tag: 1.19-alpine
-  pullPolicy: IfNotPresent
-imagePullSecrets: []
-nameOverride: ""
-podSecurityContext: {}
-securityContext: {}
-
-additionalContainers:
-  - name: "nginx-exporter"
-    image: nginx/nginx-prometheus-exporter:0.9.0
-    args:
-      - -nginx.retry-interval=10s
-    volumeMounts:
-      - name: special-config
-        mountPath: /tmp
-    env:
-      - name: SCRAPE_URI
-        value: "http://127.0.0.1:8080/stub_status"
-initContainers:
-  - name: "demo-init-container"
-    image: busybox:1.31.1
-    command: ["sh","-c", "echo test"]
-    volumeMounts:
-      - name: special-config
-        mountPath: /tmp
-    env:
-      - name: INIT_DEMO_VARIABLE
-        value: "Init Demo Variable"
-serviceAccount:
-  create: true
-  name:
-  automountServiceAccountToken: true
-network:
-  nginx-exporter:
-    servicePort: 9114
-    ingress:
-      host: nginx-exporter.chapp-test.example.tld
-  http:
-    servicePort: 8080
-    ingress:
-      host: http.chapp-test.example.tld
-service:
-  type: ClusterIP
-env:
-  - name: DEMO_VARIABLE
-    value: "Demo Variable"
-envFrom: []
-persistence:
-  name: data
-  storageClass: trident-nfs
-  enabled: true
-  accessModes: ReadWriteMany
-  size: 100Mi
-  volumeMountPath: /app/data
-volumes:
-  - name: special-config
-    configMap:
-      name: special-config
-  - name: nginx-conf
-    configMap:
-      name: nginx-conf
-volumeMounts:
-  - mountPath: /usr/local/sometool
-    name: special-config
-  - mountPath: /etc/nginx/conf.d/default.conf
-    name: nginx-conf
-    subPath: default.conf
-  - mountPath: /var/data
+app:
+  replicaCount: 2
+  image:
+    repository: library/nginx
+    tag: 1.19-alpine
+    pullPolicy: IfNotPresent
+  additionalContainers:
+    - name: "nginx-exporter"
+      image: devops/nginx-prometheus-exporter:0.9.0
+      args:
+        - -nginx.retry-interval=10s
+      resources:
+        requests:
+          cpu: 10m
+          memory: 16Mi
+        limits:
+          cpu: 100m
+          memory: 32Mi
+      volumeMounts:
+        - name: special-config
+          mountPath: /tmp
+        - mountPath: /var/data
+          name: data
+      env:
+        - name: SCRAPE_URI
+          value: "http://127.0.0.1:8080/stub_status"
+  initContainers:
+    - name: "demo-init-container"
+      image: busybox:latest
+      command: ["sh","-c", "echo test"]
+      volumeMounts:
+        - name: special-config
+          mountPath: /tmp
+      env:
+        - name: INIT_DEMO_VARIABLE
+          value: "Init Demo Variable"
+  serviceAccount:
+    create: true
+    name: nginx
+    automountServiceAccountToken: true
+  network:
+    nginx-exporter:
+      servicePort: 9113
+      serviceMonitor:
+        extraConfig:
+          basicAuth:
+            password:
+              name: basic-auth
+              key: password
+            username:
+              name: basic-auth
+              key: user
+      ingress:
+        host: nginx-exporter.example.org
+    http:
+      servicePort: 8080
+      ingress:
+        host: nginx-http.example.org
+  env:
+    - name: DEMO_VARIABLE
+      value: "Demo Variable"
+  persistence:
     name: data
-readinessProbe:
-  httpGet:
-    path: /stub_status
-    port: 8080
-  initialDelaySeconds: 5
-  timeoutSeconds: 1
-livenessProbe: {}
-resources:
-  requests:
-    cpu: 10m
-    memory: 16Mi
-  limits:
-    cpu: 100m
-    memory: 32Mi
-nodeSelector: {}
-tolerations: []
-affinity: {}
-defaultAffinityRules: {}
-annotations: {}
+    storageClass: trident-nfs-snapshot
+    enabled: true
+    accessModes: ReadWriteMany
+    size: 100Mi
+    volumeMountPath: /app/data
+  volumes:
+    - name: special-config
+      configMap:
+        name: special-config
+    - name: nginx-conf
+      configMap:
+        name: nginx-conf
+  volumeMounts:
+    - mountPath: /usr/local/sometool
+      name: special-config
+    - mountPath: /etc/nginx/conf.d/default.conf
+      name: nginx-conf
+      subPath: default.conf
+    - mountPath: /var/data
+      name: data
+  readinessProbe:
+    httpGet:
+      path: /stub_status
+      port: 8080
+    initialDelaySeconds: 5
+    timeoutSeconds: 1
+  resources:
+    requests:
+      cpu: 10m
+      memory: 16Mi
+    limits:
+      cpu: 100m
+      memory: 32Mi

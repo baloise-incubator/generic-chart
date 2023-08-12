@@ -1,0 +1,14 @@
+replicaCount: 2
+image:
+  repository: registry.example.tld/org/repo
+  tag: "v1"
+ingress:
+  controller: Route
+network:
+  http:
+    ingress:
+      host: example.example.tld
+deployment:
+  stateful:
+    enabled: true
+    servicePerPod: true

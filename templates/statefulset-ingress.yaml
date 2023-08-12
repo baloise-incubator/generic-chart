@@ -1,0 +1,35 @@
+{{- if and (and ( .Values.network ) (eq "Route" .Values.ingress.controller)) (and .Values.deployment.stateful.enabled .Values.deployment.stateful.routePerService) }}
+  {{- range $key, $val := .Values.network }}
+    {{- if not ( kindIs "invalid" $val.ingress ) }}
+      {{- if and (not $val.ingress.host) (not $.Values.ingress.clusterName) }}
+        {{- fail "either .network.{}.ingress.host or .ingress.clusterName must be set" }}
+      {{- end -}}
+      {{- if and (not $val.ingress.host) (gt (len $.Values.network) 1) }}
+        {{- fail ".ingress.clusterName only supported for single .network.{}.ingress" }}
+      {{- end }}
+      {{- range $i, $e := until ($.Values.replicaCount | int) }}
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: {{ include "generic-chart.name" $ }}-{{ $key }}-{{ $i }}
+  namespace: {{ template "generic-chart.namespace" $ }}
+  labels: {{ include "generic-chart.labels" $ | nindent 4 }}
+  annotations: {{- if $val.ingress.annotations }}{{- toYaml $val.ingress.annotations | nindent 4 }}{{- end }}
+spec:
+  host: {{ $key }}-{{ $i }}-{{ if $val.ingress.host }}{{ $val.ingress.host }}{{ else }}{{ printf "%s-%s" (include "generic-chart.name" $ ) (include "generic-chart.host" $) }}{{ end }}
+  path: {{ default "/" $val.ingress.path }}
+  port:
+    targetPort: {{ $key }}
+  tls:
+    insecureEdgeTerminationPolicy: {{ default "Redirect" $val.ingress.insecureEdgeTerminationPolicy }}
+    termination: {{ default "edge" $val.ingress.termination }}
+  to:
+    kind: Service
+    name: {{ include "generic-chart.name" $ }}-{{ $i }}
+    weight: 100
+  wildcardPolicy: None
+      {{- end }}
+    {{- end }}
+  {{- end }}
+{{- end }}

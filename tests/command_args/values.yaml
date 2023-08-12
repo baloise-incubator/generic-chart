@@ -1,0 +1,10 @@
+replicaCount: 2
+image:
+  repository: registry.example.tld/org/repo
+  tag: "v1"
+ingress:
+  controller: Route
+command:
+  - /opt/application
+args:
+  - --port=8080
