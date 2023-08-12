@@ -1,0 +1,158 @@
+"":
+  1: |
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      labels:
+        app: generic-chart
+        release: simple-app
+      name: generic-chart
+      namespace: namespace-test
+    spec:
+      replicas: 2
+      revisionHistoryLimit: 1
+      selector:
+        matchLabels:
+          app: generic-chart
+          release: simple-app
+      strategy:
+        type: RollingUpdate
+      template:
+        metadata:
+          labels:
+            app: generic-chart
+            release: simple-app
+        spec:
+          affinity:
+            podAntiAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                - labelSelector:
+                    matchExpressions:
+                      - key: app
+                        operator: In
+                        values:
+                          - generic-chart
+                      - key: release
+                        operator: In
+                        values:
+                          - simple-app
+                  topologyKey: kubernetes.io/hostname
+          containers:
+            - args: null
+              command: null
+              env: null
+              envFrom: null
+              image: registry.example.tld/org/repo:v1
+              imagePullPolicy: IfNotPresent
+              livenessProbe: null
+              name: generic-chart
+              ports:
+                - containerPort: 8080
+                  name: http
+                  protocol: TCP
+                - containerPort: 9000
+                  name: metrics
+                  protocol: TCP
+              readinessProbe: null
+              resources: null
+              securityContext: null
+              startupProbe: null
+              volumeMounts: null
+          imagePullSecrets: null
+          initContainers: null
+          nodeSelector: null
+          securityContext: null
+          serviceAccountName: generic-chart
+          tolerations: null
+          topologySpreadConstraints:
+            - labelSelector:
+                matchLabels:
+                  app: generic-chart
+                  release: simple-app
+              maxSkew: 1
+              topologyKey: null
+              whenUnsatisfiable: DoNotSchedule
+          volumes: null
+  2: |
+    apiVersion: route.openshift.io/v1
+    kind: Route
+    metadata:
+      annotations: null
+      labels:
+        app: generic-chart
+        release: simple-app
+      name: generic-chart-http
+      namespace: namespace-test
+    spec:
+      host: example.example.tld
+      path: /
+      port:
+        targetPort: http
+      tls:
+        insecureEdgeTerminationPolicy: Redirect
+        termination: edge
+      to:
+        kind: Service
+        name: generic-chart
+        weight: 100
+      wildcardPolicy: None
+  3: |
+    apiVersion: v1
+    kind: Service
+    metadata:
+      annotations: null
+      labels:
+        app: generic-chart
+        release: simple-app
+      name: generic-chart
+      namespace: namespace-test
+    spec:
+      ports:
+        - name: http
+          port: 8080
+          protocol: TCP
+          targetPort: http
+        - name: metrics
+          port: 9000
+          protocol: TCP
+          targetPort: metrics
+      selector:
+        app: generic-chart
+        release: simple-app
+      type: ClusterIP
+  4: |
+    apiVersion: v1
+    automountServiceAccountToken: false
+    kind: ServiceAccount
+    metadata:
+      annotations: null
+      labels:
+        app: generic-chart
+        release: simple-app
+      name: generic-chart
+      namespace: namespace-test
+  5: |
+    apiVersion: monitoring.coreos.com/v1
+    kind: ServiceMonitor
+    metadata:
+      labels:
+        app: generic-chart
+        release: simple-app
+      name: generic-chart-metrics
+      namespace: namespace-test
+    spec:
+      endpoints:
+        - basicAuth:
+            password:
+              key: password
+              name: internal
+            username:
+              key: username
+              name: internal
+          interval: 60s
+          path: /actuator/metrics
+          port: metrics
+          scheme: http
+      selector:
+        matchLabels:
+          app: generic-chart
