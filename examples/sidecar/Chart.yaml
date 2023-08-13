@@ -3,6 +3,6 @@ name: app-test
 version: 1.0.0
 dependencies:
   - name:  generic-chart
-    version: 3.14.0
-    repository: https://baloise-charts.github.io/
+    version: 4.0.0-pre-release
+    repository: https://baloise-incubator.github.io/generic-chart/
     alias: app
