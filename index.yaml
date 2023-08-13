@@ -2,24 +2,32 @@ apiVersion: v1
 entries:
   generic-chart:
   - apiVersion: v2
+    created: "2023-08-13T02:01:48.3106718+02:00"
+    digest: e28adda08f9a2b9558b2fb3c2256e347874f5d6ff13903c4e0255bec56467b03
+    name: generic-chart
+    urls:
+    - https://github.com/baloise-incubator/generic-chart/releases/download/generic-chart-4.0.0-pre-release/generic-chart-4.0.0-pre-release.tgz
+    version: 4.0.0-pre-
+  - apiVersion: v2
     created: "2022-10-14T17:33:39.808221953Z"
     digest: 12a19b542afca1ef0d6d46c4912788bd8eefa290bbd5a4e5e0e32727c14f3fae
     name: generic-chart
     urls:
-    - https://github.com/baloise-incubator/generic-chart/releases/download/generic-chart-2.3.0/generic-chart-2.3.0.tgz
+      - https://github.com/baloise-incubator/generic-chart/releases/download/generic-chart-2.3.0/generic-chart-2.3.0.tgz
     version: 2.3.0
   - apiVersion: v2
     created: "2022-10-13T16:52:13.301354226Z"
     digest: b9fc050c5e4c2d1ad61e31d789581a9abf17cb91bf3ed66cd3cb71996f0cd942
     name: generic-chart
     urls:
-    - https://github.com/baloise-incubator/generic-chart/releases/download/generic-chart-2.2.0/generic-chart-2.2.0.tgz
+      - https://github.com/baloise-incubator/generic-chart/releases/download/generic-chart-2.2.0/generic-chart-2.2.0.tgz
     version: 2.2.0
   - apiVersion: v2
     created: "2022-08-23T16:50:07.214397964Z"
     digest: d1fd3c3b6bfe81a88c39c346c62ffa2432fa967fde61851efaabe21065bc9095
     name: generic-chart
     urls:
-    - https://github.com/baloise-incubator/generic-chart/releases/download/generic-chart-2.1.0/generic-chart-2.1.0.tgz
+      - https://github.com/baloise-incubator/generic-chart/releases/download/generic-chart-2.1.0/generic-chart-2.1.0.tgz
     version: 2.1.0
-generated: "2022-10-14T17:33:39.808236853Z"
+generated: "2023-08-13T02:01:48.3080993+02:00"
+
