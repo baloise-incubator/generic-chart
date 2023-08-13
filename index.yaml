@@ -7,7 +7,7 @@ entries:
     name: generic-chart
     urls:
     - https://github.com/baloise-incubator/generic-chart/releases/download/generic-chart-4.0.0-pre-release/generic-chart-4.0.0-pre-release.tgz
-    version: 4.0.0-pre-
+    version: 4.0.0-pre-release
   - apiVersion: v2
     created: "2022-10-14T17:33:39.808221953Z"
     digest: 12a19b542afca1ef0d6d46c4912788bd8eefa290bbd5a4e5e0e32727c14f3fae
